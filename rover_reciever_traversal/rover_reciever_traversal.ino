@@ -8,7 +8,6 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-#include <HardwareSerial.h>
 
 RF24 radio(4, 5);  // CE, CSN
 
