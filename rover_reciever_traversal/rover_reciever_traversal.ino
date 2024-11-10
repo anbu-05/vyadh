@@ -138,16 +138,16 @@ void loop() {
 
 
 void forward() { //add a speed argument when speed change is decided
-  analogWrite(P1, 150);
-  analogWrite(P2, 150);
+  analogWrite(P1, 200);
+  analogWrite(P2, 200);
 
   digitalWrite(D1, HIGH);
   digitalWrite(D2, HIGH);
 }
 
 void backward() { //add a speed argument when speed change is decided
-  analogWrite(P1, 150);
-  analogWrite(P2, 150);
+  analogWrite(P1, 200);
+  analogWrite(P2, 200);
 
   digitalWrite(D1, LOW);
   digitalWrite(D2, LOW);
