@@ -1,0 +1,33 @@
+toggle for rover movement, inverse kinematic arm control, manual arm control, and stats.
+
+toggle to rover movement:
+	-joystick for rover control. the control will be analog, not WASD. ill prove it with the babybot.
+	-the oled display will tell the realtime gps position of the rover
+	-calibrate button to tackle stick drift and instability
+
+toggle to inverse kinematic arm control:
+	-4 joysticks for control
+	-oled display will tell theoretical position in workspace, actual position in workspace, theoretical joint angle, actual joint angle from encoders
+	-The joystick inputs will increment or decrement the workspace position rather than directly controlling the joints in real time
+	-calibrate button to tackle stick drift and instability
+
+
+toggle to manual arm control mode:
+	-4 joysticks for control
+	- +/- for turntable rotation
+	-oled display will tell theoretical position in workspace, actual position in workspace, theoretical joint angle, actual joint angle from encoders
+	-The joystick inputs will increment or decrement the joint positions rather than directly controlling the joints in real time
+	-calibrate button to tackle stick drift and instability
+ 
+toggle for stats:
+	-button that will cycle through the three batteries' voltage levels in each cell
+
+different PID modes selector: https://www.youtube.com/watch?v=qKy98Cbcltw
+
+toggle for science kit mode:
+	-8 +/- buttons for 4 pumps
+	-2 stepper buttons
+
+
+
+
