@@ -17,7 +17,7 @@ int dir_w2=2;
 //gripper
 int pwm_g=32;
 int dir_g=33;
-int freq = 10000;
+int freq = 4000;
 int res = 8;
 int pwm=160;
 int pwm_ef=40;
@@ -81,17 +81,14 @@ void setup() {
   ledcAttach(pwm_w2,freq,res);
   ledcAttach(pwm_g,freq,res);
 
-
-
-  // Register callback to receive data
+     // Register callback to receive data
   esp_now_register_recv_cb(OnDataRecv);
-
 }
 
 void loop() 
 {
    // Print received payload data
-  Serial.print("Joystick1 X: "); Serial.print(receivedPayload.joystick1_x);
+    Serial.print("Joystick1 X: "); Serial.print(receivedPayload.joystick1_x);
     Serial.print(", Joystick1 Y: "); Serial.print(receivedPayload.joystick1_y);
     Serial.print(", button1: "); Serial.println(receivedPayload.Button1);
   
@@ -110,29 +107,37 @@ void loop()
     Serial.println("  ");
     Serial.println("  ");
 
-  if(receivedPayload.joystick1_x >= 0 && receivedPayload.joystick1_x < 1800) cmd='g';
-  else if(receivedPayload.joystick1_x > 2200 && receivedPayload.joystick1_x <= 4096) cmd='t';
-  else cmd='x';
+  if ((receivedPayload.joystick1_x >= 0) && (receivedPayload.joystick1_x < 400)) cmd = 'g';
+  else if ((receivedPayload.joystick1_x > 2600) && (receivedPayload.joystick1_x <= 4095)) cmd = 't';
+  else if ((receivedPayload.joystick2_x >= 0) && (receivedPayload.joystick2_x < 400)) cmd = 'h';
+  else if ((receivedPayload.joystick2_x > 2600) && (receivedPayload.joystick2_x <= 4095)) cmd = 'y';
+  else if ((receivedPayload.joystick3_x >= 0) && (receivedPayload.joystick3_x < 400)) cmd = 'j';
+  else if ((receivedPayload.joystick3_x > 2600) && (receivedPayload.joystick3_x <= 4095)) cmd = 'u';
+  else if ((receivedPayload.joystick1_y >= 0) && (receivedPayload.joystick1_y < 400)) cmd = 'a';
+  else if ((receivedPayload.joystick1_y > 2600) && (receivedPayload.joystick1_y <= 4095)) cmd = 'd';
+  else if ((receivedPayload.joystick2_y >= 0) && (receivedPayload.joystick2_y < 400)) cmd = 's';
+  else if ((receivedPayload.joystick2_y > 2600) && (receivedPayload.joystick2_y <= 4095)) cmd = 'w';
+  else if ((receivedPayload.joystick3_y >= 0) && (receivedPayload.joystick3_y < 400)) cmd = 'r';
+  else if ((receivedPayload.joystick3_y > 2600) && (receivedPayload.joystick3_y <= 4095)) cmd = 'f';
+  else cmd = 'x';
 
-  if(receivedPayload.joystick2_x >= 0 && receivedPayload.joystick2_x < 1800) cmd='h';
-  else if(receivedPayload.joystick2_x > 2200 && receivedPayload.joystick2_x <= 4096) cmd='y';
-  else cmd='x';
 
-  if(receivedPayload.joystick3_x >= 0 && receivedPayload.joystick3_x < 1800) cmd='j';
-  else if(receivedPayload.joystick3_x > 2200 && receivedPayload.joystick3_x <= 4096) cmd='u';
-  else cmd='x';
+/*
+  if (receivedPayload.joystick1_x < 400) cmd = 'g';
+  else if (receivedPayload.joystick1_x > 2600) cmd = 't';
+  else if (receivedPayload.joystick2_x < 400) cmd = 'h';
+  else if (receivedPayload.joystick2_x > 2600) cmd = 'y';
+  else if (receivedPayload.joystick3_x < 400) cmd = 'j';
+  else if (receivedPayload.joystick3_x > 2600) cmd = 'u';
+  else if (receivedPayload.joystick1_y < 400) cmd = 'a';
+  else if (receivedPayload.joystick1_y > 2600) cmd = 'd';
+  else if (receivedPayload.joystick2_y < 400) cmd = 's';
+  else if (receivedPayload.joystick2_y > 2600) cmd = 'w';
+  else if (receivedPayload.joystick3_y < 400) cmd = 'r';
+  else if (receivedPayload.joystick3_y > 2600) cmd = 'f';
+  else cmd = 'x';
 
-  if(receivedPayload.joystick1_y >= 0 && receivedPayload.joystick1_y < 1800) cmd='a';
-  else if(receivedPayload.joystick1_y > 2200 && receivedPayload.joystick1_y <= 4096) cmd='d';
-  else cmd='x';
-
-  if(receivedPayload.joystick2_y >= 0 && receivedPayload.joystick2_y < 1800) cmd='s';
-  else if(receivedPayload.joystick2_y > 2200 && receivedPayload.joystick2_y <= 4096) cmd='w';
-  else cmd='x';
-
-  if(receivedPayload.joystick3_y >= 0 && receivedPayload.joystick3_y < 1800) cmd='r';
-  else if(receivedPayload.joystick3_y > 2200 && receivedPayload.joystick3_y <= 4096) cmd='f';
-  else cmd='x';
+  */
   
   switch(cmd){
     case('r'):

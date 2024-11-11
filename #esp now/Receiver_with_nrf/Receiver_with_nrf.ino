@@ -37,7 +37,7 @@ void setup() {
 
   Serial.begin(115200);
   Serial.println("start");
-
+  
   //the RF module's power level:
   //Options: RF24_PA_MIN, RF24_PA_LOW, RF24_PA_HIGH, RF24_PA_MAX
   radio.setPALevel(RF24_PA_MAX);
@@ -98,6 +98,7 @@ void loop() {
     uint8_t	length = radio.getDynamicPayloadSize(); //get the length of the payload from RX FIFO pipe
     Serial.println(length);
     radio.read(&payload, length); //read the from the pipe the length of the payload from the above line
+    Serial.println(radio.getChannel());
   }
 
   //traversal code
@@ -156,7 +157,7 @@ void loop() {
   } else {
     Serial.print("Error sending data: ");
   }
-  delay(1);
+  delay(20);
 }
 
 
