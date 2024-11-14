@@ -145,6 +145,7 @@ void loop() {
   Serial.println("  ");
 
   radio.write(&payload, sizeof(payload));
+  Serial.println(sizeof(payload));
 
   delay(20);
 }

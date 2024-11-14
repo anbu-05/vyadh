@@ -85,8 +85,7 @@ void setup() {
   esp_now_register_recv_cb(OnDataRecv);
 }
 
-void loop() 
-{
+void loop() {
    // Print received payload data
     Serial.print("Joystick1 X: "); Serial.print(receivedPayload.joystick1_x);
     Serial.print(", Joystick1 Y: "); Serial.print(receivedPayload.joystick1_y);
@@ -139,7 +138,7 @@ void loop()
 
   */
   
-  switch(cmd){
+  switch(cmd) {
     case('r'):
       Serial.println("r");
       digitalWrite(dir_g,HIGH);
@@ -232,10 +231,6 @@ void loop()
   }
   delay(20);
 }
-
-
-
-
 
 
 

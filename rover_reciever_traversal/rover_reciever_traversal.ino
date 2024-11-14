@@ -26,13 +26,15 @@ String speed; //change this to int later
 void setup() {
 
   //begining the module/library
-  if (!radio.begin()) {
-    Serial.println(F("radio hardware not responding!"));
-  while (1) {} // hold program in infinite loop to prevent subsequent errors
-  }
+  // if (!radio.begin()) {
+  //   Serial.println(F("radio hardware not responding!"));
+  //   while (1) {} // hold program in infinite loop to prevent subsequent errors
+  // }
 
   Serial.begin(115200);
   Serial.println("start");
+
+  radio.begin();
 
   //the RF module's power level:
   //Options: RF24_PA_MIN, RF24_PA_LOW, RF24_PA_HIGH, RF24_PA_MAX

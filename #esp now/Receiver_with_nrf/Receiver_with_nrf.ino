@@ -1,7 +1,3 @@
-//Reciever code
-
-//current status of the code: this does both reception and locomotion
-
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
