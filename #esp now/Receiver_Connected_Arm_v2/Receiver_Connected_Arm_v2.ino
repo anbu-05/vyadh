@@ -47,7 +47,7 @@ int pwm_g=32;
 int dir_g=33;
 int freq = 4000;
 int res = 8;
-int pwm=160;
+int pwm=255;
 int pwm_ef=40;
 char cmd_la1;
 char cmd_la2;
@@ -124,25 +124,25 @@ void loop() {
 
   // encoding
   if ((Payload.joystick1_x >= 0) && (Payload.joystick1_x < 400)) cmd_la1 = 'g';
-  else if ((Payload.joystick1_x > 2600) && (Payload.joystick1_x <= 4095)) cmd_la1 = 't';
+  else if ((Payload.joystick1_x > 3600) && (Payload.joystick1_x <= 4095)) cmd_la1 = 't';
   else cmd_la1 = 'x';
 
   if ((Payload.joystick2_x >= 0) && (Payload.joystick2_x < 400)) cmd_la2 = 'h';
-  else if ((Payload.joystick2_x > 2600) && (Payload.joystick2_x <= 4095)) cmd_la2 = 'y';
+  else if ((Payload.joystick2_x > 3600) && (Payload.joystick2_x <= 4095)) cmd_la2 = 'y';
   else cmd_la2 = 'x';
 
   if ((Payload.joystick3_x >= 0) && (Payload.joystick3_x < 400)) cmd_la3 = 'u';
-  else if ((Payload.joystick3_x > 2600) && (Payload.joystick3_x <= 4095)) cmd_la3 = 'j';
+  else if ((Payload.joystick3_x > 3600) && (Payload.joystick3_x <= 4095)) cmd_la3 = 'j';
   else cmd_la3 = 'x';
 
   if ((Payload.joystick1_y >= 0) && (Payload.joystick1_y < 400)) cmd_wrist = 'a';
-  else if ((Payload.joystick1_y > 2600) && (Payload.joystick1_y <= 4095)) cmd_wrist = 'd';
+  else if ((Payload.joystick1_y > 3600) && (Payload.joystick1_y <= 4095)) cmd_wrist = 'd';
   else if ((Payload.joystick2_y >= 0) && (Payload.joystick2_y < 400)) cmd_wrist = 's';
-  else if ((Payload.joystick2_y > 2600) && (Payload.joystick2_y <= 4095)) cmd_wrist = 'w';
+  else if ((Payload.joystick2_y > 3600) && (Payload.joystick2_y <= 4095)) cmd_wrist = 'w';
   else cmd_wrist = 'x';
 
   if ((Payload.joystick3_y >= 0) && (Payload.joystick3_y < 400)) cmd_gripper = 'r';
-  else if ((Payload.joystick3_y > 2600) && (Payload.joystick3_y <= 4095)) cmd_gripper = 'f';
+  else if ((Payload.joystick3_y > 3600) && (Payload.joystick3_y <= 4095)) cmd_gripper = 'f';
   else cmd_gripper = 'x';
 
 
@@ -252,13 +252,13 @@ void loop() {
     case('r'):
       Serial.println("r");
       digitalWrite(dir_g,HIGH);
-      ledcWrite(pwm_g,pwm);
+      ledcWrite(pwm_g,50);
       break;
       
     case('f'):
       Serial.println("f");
       digitalWrite(dir_g,LOW);
-      ledcWrite(pwm_g,pwm);
+      ledcWrite(pwm_g,50);
       break;
     
     case('x'):
