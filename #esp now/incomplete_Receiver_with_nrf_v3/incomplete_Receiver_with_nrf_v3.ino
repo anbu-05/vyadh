@@ -38,7 +38,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 
 RF24 radio(4, 5);  // CE, CSN
 
-byte address[6] = "00001";
+byte address[6] = "822081"; //maybe an address that's not 000001 will help
 
 
 #define P1 32
