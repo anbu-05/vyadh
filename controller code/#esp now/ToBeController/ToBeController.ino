@@ -53,7 +53,7 @@ void setup() {
 
   // begining the module/library
   if (!radio.begin()) {
-  Serial.println(F("radio hardware not responding!"));
+  Serial.println("radio hardware not responding!");
   while (1) {} // hold program in infinite loop to prevent subsequent errors
   }
 
@@ -147,5 +147,5 @@ void loop() {
   radio.write(&payload, sizeof(payload));
   Serial.println(sizeof(payload));
 
-  delay(20);
+  delay(1000);
 }

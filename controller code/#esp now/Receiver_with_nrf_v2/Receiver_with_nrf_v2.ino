@@ -115,54 +115,54 @@ void loop() {
     else {
       Serial.println("Error sending the data");
     }
-  }
   
 
-  //traversal code
-  //printing the joystick values: - comment this if the rx tx port is needed
+    //traversal code
+    //printing the joystick values: - comment this if the rx tx port is needed
 
-  Serial.print("Joystick1 X: "); Serial.print(payload.joystick1_x);
-  Serial.print(", Joystick1 Y: "); Serial.print(payload.joystick1_y);
-  Serial.print(", button1: "); Serial.println(payload.Button1);
+    Serial.print("Joystick1 X: "); Serial.print(payload.joystick1_x);
+    Serial.print(", Joystick1 Y: "); Serial.print(payload.joystick1_y);
+    Serial.print(", button1: "); Serial.println(payload.Button1);
 
-  Serial.print("Joystick2 X: "); Serial.print(payload.joystick2_x);
-  Serial.print(", Joystick2 Y: "); Serial.print(payload.joystick2_y);
-  Serial.print(", button2: "); Serial.println(payload.Button2);
+    Serial.print("Joystick2 X: "); Serial.print(payload.joystick2_x);
+    Serial.print(", Joystick2 Y: "); Serial.print(payload.joystick2_y);
+    Serial.print(", button2: "); Serial.println(payload.Button2);
 
-  Serial.print("Joystick3 X: "); Serial.print(payload.joystick3_x);
-  Serial.print(", Joystick3 Y: "); Serial.print(payload.joystick3_y);
-  Serial.print(", button3: "); Serial.println(payload.Button3);
+    Serial.print("Joystick3 X: "); Serial.print(payload.joystick3_x);
+    Serial.print(", Joystick3 Y: "); Serial.print(payload.joystick3_y);
+    Serial.print(", button3: "); Serial.println(payload.Button3);
 
-  Serial.print("slide switch 1: "); Serial.println(payload.slide1);
-  Serial.print("slide switch 2: "); Serial.println(payload.slide2);
+    Serial.print("slide switch 1: "); Serial.println(payload.slide1);
+    Serial.print("slide switch 2: "); Serial.println(payload.slide2);
 
-  Serial.println("  ");
-  Serial.println("  ");
-  Serial.println("  ");
+    Serial.println("  ");
+    Serial.println("  ");
+    Serial.println("  ");
 
-  if (payload.joystick2_x >= 3900) {
-    Serial.println("forward");
-    forward();
-  }
+    if (payload.joystick2_x >= 3900) {
+      Serial.println("forward");
+      forward();
+    }
 
-  else if (payload.joystick2_x <= 200) {
-    Serial.println("backward");
-    backward();
-  }
-  
-  else if (payload.joystick2_y >= 3900) {
-    Serial.println("right");
-    right();
-  }
+    else if (payload.joystick2_x <= 200) {
+      Serial.println("backward");
+      backward();
+    }
+    
+    else if (payload.joystick2_y >= 3900) {
+      Serial.println("right");
+      right();
+    }
 
-  else if (payload.joystick2_y <= 200) {
-    Serial.println("left");
-    left();
-  }
+    else if (payload.joystick2_y <= 200) {
+      Serial.println("left");
+      left();
+    }
 
-  else {
-    Serial.println("stopped");
-    stop();
+    else {
+      Serial.println("stopped");
+      stop();
+    }
   }
 }
 

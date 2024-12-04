@@ -17,7 +17,7 @@ void setup() {
 
   //begining the module/library
   if (!radio.begin()) {
-    Serial.println(F("radio hardware not responding!"));
+    Serial.println("radio hardware not responding!");
   while (1) {} // hold program in infinite loop to prevent subsequent errors
   }
 
@@ -62,17 +62,14 @@ struct controllerData{
 
 void loop() {
   controllerData payload;
-  uint8_t pipe1;  //create a buffer to which the 1st pipe writes to
-  if (radio.available(&pipe1))
-  {  //see if there are any bytes available to read on pipe1
+  if (radio.available()) {
     Serial.println("payload available:");
     uint8_t	length = radio.getPayloadSize(); //get the length of the payload from RX FIFO pipe
     Serial.println(length);
     radio.read(&payload, length); //read the from the pipe the length of the payload from the above line
     Serial.println(radio.getChannel());
-  }
 
-  //traversal code
+    //traversal code
     //printing the joystick values: - comment this if the rx tx port is needed
 
     Serial.print("Joystick1 X: "); Serial.print(payload.joystick1_x);
@@ -118,6 +115,7 @@ void loop() {
       Serial.println("stopped");
       stop();
     }
+  }
 }
 
 void forward() { //add a speed argument when speed change is decided
