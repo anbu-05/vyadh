@@ -221,7 +221,7 @@ void backward(uint8_t speed) { //add a speed argument when speed change is decid
 
   gradual_speed(speed, rate, 1);
 }
-}
+
 
 void right(uint8_t speed) { //add a speed argument when speed change is decided
   //speed = map(speed, 200, 255, 0, 255);
@@ -230,7 +230,7 @@ void right(uint8_t speed) { //add a speed argument when speed change is decided
 
   gradual_speed(speed, rate, 1);
 }
-}
+
 
 void left(uint8_t speed) { //add a speed argument when speed change is decided
   //speed = map(speed, 50, 0, 0, 255);
@@ -239,12 +239,11 @@ void left(uint8_t speed) { //add a speed argument when speed change is decided
 
   gradual_speed(speed, rate, 1);
 }
-}
+
 
 void stop() { //add a speed argument when speed change is decided
   digitalWrite(D1, HIGH);
   digitalWrite(D2, HIGH);
 
   gradual_speed(speed, rate, 1);
-}
 }
