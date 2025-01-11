@@ -29,6 +29,17 @@ esp_now_peer_info_t slave;
 int speed = 255;
 int rate = 10;
 
+// Pin definitions for LoRa SX1278
+#define ss 22         // Slave Select (NSS)
+#define rst 5       // Reset
+#define dio0 21       // Digital I/O 0
+
+#define P2 32
+#define D2 33
+
+#define P1 25
+#define D1 26
+
 void gradual_speed(int final_speed, int rate, bool ifOn = 0) {
   if (ifOn){
     for (int speed = 0; speed < final_speed; speed++) {
@@ -46,17 +57,6 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.print("Transmission Status: ");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
 }
-
-// Pin definitions for LoRa SX1278
-#define ss 22         // Slave Select (NSS)
-#define rst 5       // Reset
-#define dio0 21       // Digital I/O 0
-
-#define P2 32
-#define D2 33
-
-#define P1 25
-#define D1 26
 
 void setup() {
   Serial.begin(115200);
