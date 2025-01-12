@@ -4,7 +4,7 @@
 #include <WiFi.h>
 #include <esp_wifi.h>
 
-uint8_t broadcastAddress[] = {0xD4, 0x8A, 0xFC, 0x9D, 0xCB, 0x80}; //reciever's MAC address, (this is sender's code)
+uint8_t broadcastAddress[] = {0xEC, 0x64, 0xC9, 0x5E, 0x11, 0x3C}; //reciever's MAC address, (this is sender's code)
 
 uint8_t joystick1_x = 0;
 uint8_t joystick1_y = 0;
@@ -27,7 +27,9 @@ uint8_t payload[11];
 esp_now_peer_info_t slave;
 
 int speed = 255;
-int rate = 10;
+int delay_rate = 1; //delay between each gradual increase step
+
+int gradual_increase_flag = 0;
 
 // Pin definitions for LoRa SX1278
 #define ss 22         // Slave Select (NSS)
@@ -40,17 +42,19 @@ int rate = 10;
 #define P1 25
 #define D1 26
 
-void gradual_speed(int final_speed, int rate, bool ifOn = 0) {
-  if (ifOn){
+void gradual_speed(int final_speed, int delay_rate, bool ifOn = 0) {
+  if (ifOn && gradual_increase_flag){
     for (int speed = 0; speed < final_speed; speed++) {
       analogWrite(P1, speed);
       analogWrite(P2, speed);
       //Serial.println(speed);
-      delay(rate);
+      delay(delay_rate);
     }
   }
   analogWrite(P1, final_speed);
   analogWrite(P2, final_speed);
+
+  gradual_increase_flag = 0;
 }
 
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
@@ -150,22 +154,22 @@ void loop() {
   Serial.println("  ");
   Serial.println("  ");
 
-  if (joystick1_y >= 250) {
+  if (joystick1_x >= 250) {
     Serial.println("forward");
     forward(speed);
   }
 
-  else if (joystick1_y <= 5) {
+  else if (joystick1_x <= 5) {
     Serial.println("backward");
     backward(speed);
   }
   
-  else if (joystick1_x >= 250) {
+  else if (joystick1_y >= 250) {
     Serial.println("right");
     right(2*speed);
   }
 
-  else if (joystick1_x <= 5) {
+  else if (joystick1_y <= 5) {
     Serial.println("left");
     left(2*speed);
   }
@@ -206,12 +210,14 @@ void resetPayload(uint8_t payload[11]) {
   payload[9] = 128;
   payload[10] = 128;
 }
+
+
 void forward(uint8_t speed) { //add a speed argument when speed change is decided
   //speed = map(speed, 200, 255, 0, 255);
   digitalWrite(D1, HIGH);
   digitalWrite(D2, HIGH);
 
-  gradual_speed(speed, rate, 1);
+  gradual_speed(speed, delay_rate, 1);
 }
 
 void backward(uint8_t speed) { //add a speed argument when speed change is decided
@@ -219,7 +225,7 @@ void backward(uint8_t speed) { //add a speed argument when speed change is decid
   digitalWrite(D1, LOW);
   digitalWrite(D2, LOW);
 
-  gradual_speed(speed, rate, 1);
+  gradual_speed(speed, delay_rate, 1);
 }
 
 
@@ -228,7 +234,7 @@ void right(uint8_t speed) { //add a speed argument when speed change is decided
   digitalWrite(D1, HIGH);
   digitalWrite(D2, LOW);
 
-  gradual_speed(speed, rate, 1);
+  gradual_speed(speed, delay_rate, 1);
 }
 
 
@@ -237,7 +243,7 @@ void left(uint8_t speed) { //add a speed argument when speed change is decided
   digitalWrite(D1, LOW);
   digitalWrite(D2, HIGH);
 
-  gradual_speed(speed, rate, 1);
+  gradual_speed(speed, delay_rate, 1);
 }
 
 
@@ -245,5 +251,6 @@ void stop() { //add a speed argument when speed change is decided
   digitalWrite(D1, HIGH);
   digitalWrite(D2, HIGH);
 
-  gradual_speed(speed, rate, 1);
+  gradual_speed(0, delay_rate, 1);
+  gradual_increase_flag = 1;
 }

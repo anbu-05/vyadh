@@ -27,12 +27,12 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
 }
 
 
-int dir_la1=13; //la 1
-int dir_la2=25; //la 2
-int dir_la3=19; //la 3
-int pwm_la1=12; //la 1
-int pwm_la2=26; //la 2
-int pwm_la3=18; //la 3
+int dir_la1=33; //la 1
+int dir_la2=22; //la 2
+int dir_la3=26; //la 3
+int pwm_la1=32; //la 1
+int pwm_la2=23; //la 2
+int pwm_la3=25; //la 3
 //wrist 
 int pwm_w1=27;
 int dir_w1=14;
@@ -93,55 +93,48 @@ void setup() {
   ledcAttach(pwm_w2,freq,res);
   ledcAttach(pwm_g,freq,res);
 
+  assignFromPayload(payload);
+  resetPayload(payload);
+
   // Register callback to receive data
   esp_now_register_recv_cb(esp_now_recv_cb_t(OnDataRecv));
 }
 
 void loop() {
-
-  assignFrompayload(payload);
+  assignFromPayload(payload);
   // Print received payload data
-  Serial.print("Joystick1 X: "); Serial.print(joystick1_x);
-  Serial.print(", Joystick1 Y: "); Serial.print(joystick1_y);
-  //Serial.print(", button1: "); Serial.println(Button1);
-
-  Serial.print("Joystick2 X: "); Serial.print(joystick2_x);
-  Serial.print(", Joystick2 Y: "); Serial.print(joystick2_y);
-  //Serial.print(", button2: "); Serial.println(Button2);
-
-  Serial.print("Joystick3 X: "); Serial.print(joystick3_x);
-  Serial.print(", Joystick3 Y: "); Serial.print(joystick3_y);
-  //Serial.print(", button3: "); Serial.println(Button3);
-
-  Serial.print("slide switch 1: "); Serial.println(slide1);
-  Serial.print("slide switch 2: "); Serial.println(slide2);
+  Serial.println("payload:");
+  Serial.print(joystick1_x); Serial.print(", "); Serial.print(joystick1_y);  Serial.print(", "); Serial.println(Button1);
+  Serial.print(joystick2_x); Serial.print(", "); Serial.print(joystick2_y);  Serial.print(", "); Serial.println(Button2);
+  Serial.print(joystick3_x); Serial.print(", "); Serial.print(joystick3_y);  Serial.print(", "); Serial.println(Button3);
+  Serial.print(slide1); Serial.print(", "); Serial.println(slide2);
 
   Serial.println("  ");
   Serial.println("  ");
   Serial.println("  ");
 
-  if (slide2) {
+  //if (slide1) {
     // encoding
-    if ((joystick1_x >= 0) && (joystick1_x < 400)) cmd_la1 = 'g';
-    else if ((joystick1_x > 3600) && (joystick1_x <= 4095)) cmd_la1 = 't';
+    if ((joystick1_x >= 0) && (joystick1_x < 5)) cmd_la1 = 'g';
+    else if ((joystick1_x > 250) && (joystick1_x <= 255)) cmd_la1 = 't';
     else cmd_la1 = 'x';
 
-    if ((joystick2_x >= 0) && (joystick2_x < 400)) cmd_la2 = 'h';
-    else if ((joystick2_x > 3600) && (joystick2_x <= 4095)) cmd_la2 = 'y';
+    if ((joystick2_x >= 0) && (joystick2_x < 5)) cmd_la2 = 'h';
+    else if ((joystick2_x > 250) && (joystick2_x <= 255)) cmd_la2 = 'y';
     else cmd_la2 = 'x';
 
-    if ((joystick3_x >= 0) && (joystick3_x < 400)) cmd_la3 = 'u';
-    else if ((joystick3_x > 3600) && (joystick3_x <= 4095)) cmd_la3 = 'j';
+    if ((joystick3_x >= 0) && (joystick3_x < 5)) cmd_la3 = 'u';
+    else if ((joystick3_x > 250) && (joystick3_x <= 255)) cmd_la3 = 'j';
     else cmd_la3 = 'x';
 
-    if ((joystick1_y >= 0) && (joystick1_y < 400)) cmd_wrist = 'a';
-    else if ((joystick1_y > 3600) && (joystick1_y <= 4095)) cmd_wrist = 'd';
-    else if ((joystick2_y >= 0) && (joystick2_y < 400)) cmd_wrist = 's';
-    else if ((joystick2_y > 3600) && (joystick2_y <= 4095)) cmd_wrist = 'w';
+    if ((joystick1_y >= 0) && (joystick1_y < 5)) cmd_wrist = 'a';
+    else if ((joystick1_y > 250) && (joystick1_y <= 255)) cmd_wrist = 'd';
+    else if ((joystick2_y >= 0) && (joystick2_y < 5)) cmd_wrist = 's';
+    else if ((joystick2_y > 250) && (joystick2_y <= 255)) cmd_wrist = 'w';
     else cmd_wrist = 'x';
 
-    if ((joystick3_y >= 0) && (joystick3_y < 400)) cmd_gripper = 'r';
-    else if ((joystick3_y > 3600) && (joystick3_y <= 4095)) cmd_gripper = 'f';
+    if ((joystick3_y >= 0) && (joystick3_y < 5)) cmd_gripper = 'r';
+    else if ((joystick3_y > 250) && (joystick3_y <= 255)) cmd_gripper = 'f';
     else cmd_gripper = 'x';
 
 
@@ -265,11 +258,10 @@ void loop() {
         ledcWrite(pwm_g,0);
         break;
     }
-  }
-  delay(20);
+  //}
 }
 
-void assignFrompayload(uint8_t payload[11]) {
+void assignFromPayload(uint8_t payload[11]) {
   slide2 = payload[0];
   slide1 = payload[1];
 
@@ -284,4 +276,18 @@ void assignFrompayload(uint8_t payload[11]) {
   Button1 = payload[8];
   joystick1_y = payload[9];
   joystick1_x = payload[10];
+}
+
+void resetPayload(uint8_t payload[11]) {
+  payload[0] = 0;
+  payload[1] = 0;
+  payload[2] = 0;
+  payload[3] = 128;
+  payload[4] = 128;
+  payload[5] = 0;
+  payload[6] = 128;
+  payload[7] = 128;
+  payload[8] = 0;
+  payload[9] = 128;
+  payload[10] = 128;
 }
