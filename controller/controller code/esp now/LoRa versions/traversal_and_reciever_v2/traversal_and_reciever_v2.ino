@@ -33,8 +33,8 @@ int gradual_increase_flag = 0;
 
 // Pin definitions for LoRa SX1278
 #define ss 22         // Slave Select (NSS)
-#define rst 5       // Reset
-#define dio0 21       // Digital I/O 0
+#define rst 21       // Reset
+#define dio0 5       // Digital I/O 0
 
 #define P2 32
 #define D2 33
