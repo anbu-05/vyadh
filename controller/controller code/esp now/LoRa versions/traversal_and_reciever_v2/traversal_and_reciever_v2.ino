@@ -18,7 +18,7 @@ uint8_t joystick3_x = 0;
 uint8_t joystick3_y = 0;
 uint8_t Button3 = 0;
 
-uint8_t slide1 = 0;
+uint8_t mode_select = 0;
 uint8_t slide2 = 0;
 
 
@@ -148,7 +148,7 @@ void loop() {
   Serial.print(joystick1_x); Serial.print(", "); Serial.print(joystick1_y);  Serial.print(", "); Serial.println(Button1);
   Serial.print(joystick2_x); Serial.print(", "); Serial.print(joystick2_y);  Serial.print(", "); Serial.println(Button2);
   Serial.print(joystick3_x); Serial.print(", "); Serial.print(joystick3_y);  Serial.print(", "); Serial.println(Button3);
-  Serial.print(slide1); Serial.print(", "); Serial.println(slide2);
+  Serial.print(mode_select); Serial.print(", "); Serial.println(slide2);
 
   Serial.println("  ");
   Serial.println("  ");
@@ -182,7 +182,7 @@ void loop() {
 
 void assignFromPayload(uint8_t payload[11]) {
   slide2 = payload[0];
-  slide1 = payload[1];
+  mode_select = payload[1];
 
   Button3 = payload[2];
   joystick3_y = payload[3];
