@@ -430,12 +430,6 @@ void loop() {
           ledcWrite(pwmw2, 150);
         //}
         break;
-      
-      // case 'x':
-      //   Serial.println("x");
-      //   ledcWrite(pwmw1, 0); 
-      //   ledcWrite(pwmw2, 0);  
-      //   break;
 
       default:
         Serial.println("x");
@@ -454,8 +448,8 @@ void loop() {
           Serial.println("a");
           digitalWrite(dirw1, LOW);
           digitalWrite(dirw2, LOW);
-          ledcWrite(pwmw1, 255);
-          ledcWrite(pwmw2, 255);
+          ledcWrite(pwmw1, 150);
+          ledcWrite(pwmw2, 150);
         //}
         break;
 
@@ -468,16 +462,10 @@ void loop() {
           Serial.println("d");
           digitalWrite(dirw1, HIGH);
           digitalWrite(dirw2, HIGH);
-          ledcWrite(pwmw1, 255);
-          ledcWrite(pwmw2, 255);
+          ledcWrite(pwmw1, 150);
+          ledcWrite(pwmw2, 150);
         //}
         break;
-      
-      // case 'x':
-      //   Serial.println("x");
-      //   ledcWrite(pwmw1, 0); 
-      //   ledcWrite(pwmw2, 0);  
-      //   break;
 
       default:
         Serial.println("x");
