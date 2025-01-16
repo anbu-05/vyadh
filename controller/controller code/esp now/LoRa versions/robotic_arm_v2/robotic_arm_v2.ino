@@ -138,7 +138,7 @@ void setup(){
 
   // Register callback to receive data
   esp_now_register_recv_cb(esp_now_recv_cb_t(OnDataRecv));
-  homing();
+  //homing();
 
 }
 
@@ -307,31 +307,31 @@ void resetPayload(uint8_t payload[11]) {
   payload[10] = 128;
 }
 
-void homing() {
-  lmt = analogRead(limit);
-  while(lmt < 4000){
-    ledcWrite(pwmw1, pwm_homing);
-    digitalWrite(dirw1, HIGH);
-    ledcWrite(pwmw2, pwm_homing);
-    digitalWrite(dirw2, LOW);
-    lmt = analogRead(limit);
-  }
-  ledcWrite(pwmw1,0);
-  ledcWrite(pwmw2,0);
-  Serial.println("limit switch hit");
-  Serial.println("Reaching zero degree");
-  posi = 0;
-  while(posi <= zero_pulse){
-    ledcWrite(pwmw1, pwm_homing);
-    digitalWrite(dirw1, LOW);
-    ledcWrite(pwmw2, pwm_homing);
-    digitalWrite(dirw2, HIGH);
-  }
-  posi = 0;
-  ledcWrite(pwmw1,0);
-  ledcWrite(pwmw2,0);
-  Serial.println("homing complete");
-}
+// void homing() {
+//   lmt = analogRead(limit);
+//   while(lmt < 4000){
+//     ledcWrite(pwmw1, pwm_homing);
+//     digitalWrite(dirw1, HIGH);
+//     ledcWrite(pwmw2, pwm_homing);
+//     digitalWrite(dirw2, LOW);
+//     lmt = analogRead(limit);
+//   }
+//   ledcWrite(pwmw1,0);
+//   ledcWrite(pwmw2,0);
+//   Serial.println("limit switch hit");
+//   Serial.println("Reaching zero degree");
+//   posi = 0;
+//   while(posi <= zero_pulse){
+//     ledcWrite(pwmw1, pwm_homing);
+//     digitalWrite(dirw1, LOW);
+//     ledcWrite(pwmw2, pwm_homing);
+//     digitalWrite(dirw2, HIGH);
+//   }
+//   posi = 0;
+//   ledcWrite(pwmw1,0);
+//   ledcWrite(pwmw2,0);
+//   Serial.println("homing complete");
+// }
 
 void moveJoints(float b1, float b2, float b3, float b4) {
   int c1 = analogRead(pot1);
@@ -390,12 +390,12 @@ void moveJoints(float b1, float b2, float b3, float b4) {
       //pwm ramping
       pwm_ef = constrain(abs(b4 - posi)/5, 0, 120);
       //safety homing
-      lmt = analogRead(limit);
-      if(lmt > 4000){
-        homing();
-        lmt=0;
-        break;
-      }
+      // lmt = analogRead(limit);
+      // if(lmt > 4000){
+      //   homing();
+      //   lmt=0;
+      //   break;
+      // }
     }
     while (b4 < posi - 50){
       ledcWrite(pwmw1, pwm_ef);
@@ -406,13 +406,14 @@ void moveJoints(float b1, float b2, float b3, float b4) {
       //pwm ramping
       pwm_ef = constrain(abs(b4 - posi)/5, 0, 120);
       //safety homing
-      lmt = analogRead(limit);
-      if(lmt > 4000){
-        homing();
-        lmt = 0;
-        break;
-      }
+      // lmt = analogRead(limit);
+      // if(lmt > 4000){
+      //   homing();
+      //   lmt = 0;
+      //   break;
+      // }
     }
+    pwm_ef = 120;
     ledcWrite(pwmw1, 0);
     ledcWrite(pwmw2, 0);
     Serial.println("error corrected");

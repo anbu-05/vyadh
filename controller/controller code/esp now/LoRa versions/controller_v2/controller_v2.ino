@@ -26,8 +26,8 @@
 #define joy3_y 25
 #define but3 33
 
-#define mde_slct 13
-#define slde2 17
+#define ra_pos 13
+#define mde_slct 22
 
 
 
@@ -51,8 +51,8 @@ void setup() {
   pinMode(but3, INPUT_PULLDOWN);
 
   //slide switches
+  pinMode(ra_pos, INPUT);
   pinMode(mde_slct, INPUT);
-  pinMode(slde2, INPUT);
 
   Serial.begin(115200);
   Serial.println("begin");
@@ -83,13 +83,13 @@ uint8_t joystick3_x;
 uint8_t joystick3_y;
 uint8_t Button3;
 
+uint8_t robotic_arm_position;
 uint8_t mode_select;
-uint8_t slide2;
 
 // uint8_t prev_joystick1_x = 0, prev_joystick1_y = 0, prev_Button1 = 0;
 // uint8_t prev_joystick2_x = 0, prev_joystick2_y = 0, prev_Button2 = 0;
 // uint8_t prev_joystick3_x = 0, prev_joystick3_y = 0, prev_Button3 = 0;
-// uint8_t prev_mode_select = 0, prev_slide2 = 0;
+// uint8_t prev_robotic_arm_position = 0, prev_mode_select = 0;
 
 // Define idle range for joysticks (around center position)
 const uint8_t joystick_idle_min = 120; // Minimum idle value
@@ -114,8 +114,8 @@ void loop() {
   joystick3_y = analogRead(joy3_y) >> 4;
   Button3 = digitalRead(but3);
 
+  robotic_arm_position = analogRead(ra_pos) >> 4;
   mode_select = analogRead(mde_slct) >> 4;
-  slide2 = digitalRead(slde2);
 
   print_data();
 
@@ -130,7 +130,7 @@ void loop() {
 
   bool buttons_and_slides_untouched =
       (Button1 == LOW) && (Button2 == LOW) && (Button3 == LOW) &&
-      (mode_select == LOW) && (slide2 == LOW);
+      (robotic_arm_position == LOW) && (mode_select == LOW);
 
   // Only send data if there's a change
   if (!joysticks_untouched || !buttons_and_slides_untouched) {
@@ -165,15 +165,15 @@ void assignToPayload(uint8_t payload[11]) {
   payload[7] = joystick3_y;
   payload[8] = Button3;
 
-  payload[9] = mode_select;
-  payload[10] = slide2;
+  payload[9] = robotic_arm_position;
+  payload[10] = mode_select;
 }
 
 void print_data() {
   Serial.print(joystick1_x); Serial.print(","); Serial.print(joystick1_y); Serial.print(","); Serial.print(Button1); Serial.println("  ");
   Serial.print(joystick2_x); Serial.print(","); Serial.print(joystick2_y); Serial.print(","); Serial.print(Button2); Serial.println("  ");
   Serial.print(joystick3_x); Serial.print(","); Serial.print(joystick3_y); Serial.print(","); Serial.print(Button3); Serial.println("  ");
-  Serial.print(mode_select); Serial.print(","); Serial.print(slide2); Serial.println("  ");
+  Serial.print(robotic_arm_position); Serial.print(","); Serial.print(mode_select); Serial.println("  ");
 
   Serial.println("  ");
   Serial.println("  ");

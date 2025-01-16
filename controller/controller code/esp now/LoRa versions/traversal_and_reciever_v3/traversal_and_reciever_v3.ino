@@ -27,9 +27,7 @@ uint8_t payload[11];
 esp_now_peer_info_t slave;
 
 int speed = 255;
-int delay_rate = 2; //delay between each gradual increase step
-
-int gradual_increase_flag = 0;
+int delay_rate = 3; //delay between each gradual increase step
 
 // Pin definitions for LoRa SX1278
 #define ss 22         // Slave Select (NSS)
@@ -43,18 +41,36 @@ int gradual_increase_flag = 0;
 #define D1 26
 
 void gradual_speed(int final_speed, int delay_rate, bool ifOn = 0) {
-  if (ifOn && gradual_increase_flag){
+  int gradual_increase_flag = 1;
+  if (ifOn){
     for (int speed = 0; speed < final_speed; speed++) {
       analogWrite(P1, speed);
       analogWrite(P2, speed);
       //Serial.println(speed);
       delay(delay_rate);
+      gradual_increase_flag = gradual_inrease_interrupt();
+      if (!gradual_increase_flag) {
+        break;
+      }
     }
   }
   analogWrite(P1, final_speed);
   analogWrite(P2, final_speed);
+}
 
-  gradual_increase_flag = 0;
+int gradual_inrease_interrupt() {
+  assignFromLoRa();
+  assignFromPayload(payload);
+
+  if (joystick1_x >= 5 || joystick1_x <= 250) {
+    return 0;
+  }
+
+  if (joystick1_y >= 5 || joystick1_y <= 250) {
+    return 0;
+  }
+
+  return 1;
 }
 
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
@@ -110,36 +126,8 @@ void setup() {
 
 
 void loop() {
-  // Try to parse a packet
-  int packetSize = LoRa.parsePacket();
-  if (packetSize) {
-    Serial.println("###Received packet###");
 
-    // Read packet contents 
-    int i = LoRa.available();
-    while (i) {
-      //Serial.println(i);
-      payload[i-1] = LoRa.read();
-      //Serial.println(payload[i-1]);
-      i--;
-    }
-
-    // Print RSSI (signal strength)
-    Serial.print("RSSI: ");
-    Serial.println(LoRa.packetRssi());
-    Serial.println(LoRa.packetFrequencyError());
-
-    //sending the data through esp now to robotic arm
-    esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &payload, sizeof(payload));
-
-    if (result == ESP_OK) {
-    Serial.println("Sent with success");
-    }
-    else {
-      Serial.println("Error sending the data");
-    }
-  }
-
+  assignFromLoRa();
   assignFromPayload(payload);
 
   //traversal code
@@ -195,6 +183,37 @@ void assignFromPayload(uint8_t payload[11]) {
   Button1 = payload[8];
   joystick1_y = payload[9];
   joystick1_x = payload[10];
+}
+
+void assignFromLoRa() {
+  int packetSize = LoRa.parsePacket();
+  if (packetSize) {
+    Serial.println("###Received packet###");
+
+    // Read packet contents 
+    int i = LoRa.available();
+    while (i) {
+      //Serial.println(i);
+      payload[i-1] = LoRa.read();
+      //Serial.println(payload[i-1]);
+      i--;
+    }
+
+    // Print RSSI (signal strength)
+    Serial.print("RSSI: ");
+    Serial.println(LoRa.packetRssi());
+    Serial.println(LoRa.packetFrequencyError());
+
+    //sending the data through esp now to robotic arm
+    esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &payload, sizeof(payload));
+
+    if (result == ESP_OK) {
+    Serial.println("Sent with success");
+    }
+    else {
+      Serial.println("Error sending the data");
+    }
+  }
 }
 
 void resetPayload(uint8_t payload[11]) {
@@ -253,3 +272,4 @@ void stop() { //add a speed argument when speed change is decided
 
   gradual_speed(0, delay_rate, 1);
 }
+
