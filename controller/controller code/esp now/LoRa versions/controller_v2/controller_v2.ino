@@ -28,6 +28,7 @@
 
 #define ra_pos 13
 #define mde_slct 22
+#define mde_slct_2 21
 
 
 
@@ -53,6 +54,7 @@ void setup() {
   //slide switches
   pinMode(ra_pos, INPUT);
   pinMode(mde_slct, INPUT);
+  pinMode(mde_slct_2, INPUT);
 
   Serial.begin(115200);
   Serial.println("begin");
@@ -85,17 +87,12 @@ uint8_t Button3;
 
 uint8_t robotic_arm_position;
 uint8_t mode_select;
+uint8_t mode_select_2;
 
-// uint8_t prev_joystick1_x = 0, prev_joystick1_y = 0, prev_Button1 = 0;
-// uint8_t prev_joystick2_x = 0, prev_joystick2_y = 0, prev_Button2 = 0;
-// uint8_t prev_joystick3_x = 0, prev_joystick3_y = 0, prev_Button3 = 0;
-// uint8_t prev_robotic_arm_position = 0, prev_mode_select = 0;
-
-// Define idle range for joysticks (around center position)
 const uint8_t joystick_idle_min = 120; // Minimum idle value
 const uint8_t joystick_idle_max = 135; // Maximum idle value
 
-uint8_t payload[11];
+uint8_t payload[12];
 
 void loop() {
 
@@ -115,9 +112,10 @@ void loop() {
   Button3 = digitalRead(but3);
 
   robotic_arm_position = analogRead(ra_pos) >> 4;
-  mode_select = analogRead(mde_slct) >> 4;
+  mode_select = digitalRead(mde_slct);
+  mode_select_2 = digitalRead(mde_slct_2);
 
-  print_data();
+  printValues();
 
     // Check for significant changes
   bool joysticks_untouched = 
@@ -130,7 +128,7 @@ void loop() {
 
   bool buttons_and_slides_untouched =
       (Button1 == LOW) && (Button2 == LOW) && (Button3 == LOW) &&
-      (robotic_arm_position == LOW) && (mode_select == LOW);
+      (robotic_arm_position == LOW) && (mode_select == LOW) && (mode_select_2 == LOW);
 
   // Only send data if there's a change
   if (!joysticks_untouched || !buttons_and_slides_untouched) {
@@ -152,7 +150,7 @@ void loop() {
   }
 }
 
-void assignToPayload(uint8_t payload[11]) {
+void assignToPayload(uint8_t payload[12]) {
   payload[0] = joystick1_x;
   payload[1] = joystick1_y;
   payload[2] = Button1;
@@ -167,13 +165,14 @@ void assignToPayload(uint8_t payload[11]) {
 
   payload[9] = robotic_arm_position;
   payload[10] = mode_select;
+  payload[11] = mode_select_2;
 }
 
-void print_data() {
+void printValues() {
   Serial.print(joystick1_x); Serial.print(","); Serial.print(joystick1_y); Serial.print(","); Serial.print(Button1); Serial.println("  ");
   Serial.print(joystick2_x); Serial.print(","); Serial.print(joystick2_y); Serial.print(","); Serial.print(Button2); Serial.println("  ");
   Serial.print(joystick3_x); Serial.print(","); Serial.print(joystick3_y); Serial.print(","); Serial.print(Button3); Serial.println("  ");
-  Serial.print(robotic_arm_position); Serial.print(","); Serial.print(mode_select); Serial.println("  ");
+  Serial.print(robotic_arm_position); Serial.print(","); Serial.print(mode_select); Serial.print(","); Serial.print(mode_select_2); Serial.println("  ");
 
   Serial.println("  ");
   Serial.println("  ");

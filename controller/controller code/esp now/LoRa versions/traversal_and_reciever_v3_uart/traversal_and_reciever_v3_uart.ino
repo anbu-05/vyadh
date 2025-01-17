@@ -1,10 +1,10 @@
 #include <SPI.h>
 #include <LoRa.h>
-#include <esp_now.h>
-#include <WiFi.h>
-#include <esp_wifi.h>
 
-uint8_t broadcastAddress[] = {0xEC, 0x64, 0xC9, 0x5E, 0x11, 0x3C}; //reciever's MAC address, (this is sender's code)
+//uint8_t broadcastAddress[] = {0xEC, 0x64, 0xC9, 0x5E, 0x11, 0x3C}; //reciever's MAC address, (this is sender's code)
+
+#define RXD2 17
+#define TXD2 16
 
 uint8_t joystick1_x = 0;
 uint8_t joystick1_y = 0;
@@ -25,7 +25,7 @@ uint8_t mode_select_2 = 0;
 
 uint8_t payload[12];
 
-esp_now_peer_info_t slave;
+//esp_now_peer_info_t slave;
 
 int speed = 255;
 int slow = 128;
@@ -77,14 +77,20 @@ int gradual_inrease_interrupt() {
   return 0;
 }
 
-void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-  Serial.print("Transmission Status: ");
-  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
-}
+// void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+//   Serial.print("Transmission Status: ");
+//   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
+// }
+
+HardwareSerial uart(1);
 
 void setup() {
+
   Serial.begin(115200);
-  while (!Serial);
+  Serial.println("1");
+  uart.begin(115200, SERIAL_8N1, RXD2, TXD2);
+  Serial.println("2"); 
+
 
   Serial.println("LoRa Receiver Setup");
 
@@ -108,33 +114,36 @@ void setup() {
   assignFromPayload(payload);
   resetPayload(payload);
 
-  WiFi.mode(WIFI_STA);
+  // WiFi.mode(WIFI_STA);
   
-  if (esp_now_init() != ESP_OK) {
-    Serial.println("Error initializing ESP-NOW");
-    return;
-  }
+  // if (esp_now_init() != ESP_OK) {
+  //   Serial.println("Error initializing ESP-NOW");
+  //   return;
+  // }
 
-  esp_now_register_send_cb(OnDataSent);
+  // esp_now_register_send_cb(OnDataSent);
   
-  //Register peer
-  memcpy(slave.peer_addr, broadcastAddress, 6);
-  slave.channel = 0;
-  slave.encrypt = false;
+  // //Register peer
+  // memcpy(slave.peer_addr, broadcastAddress, 6);
+  // slave.channel = 0;
+  // slave.encrypt = false;
 
-  if (esp_now_add_peer(&slave) != ESP_OK){
-    Serial.println("Failed to add peer");
-    return;
-  }
+  // if (esp_now_add_peer(&slave) != ESP_OK){
+  //   Serial.println("Failed to add peer");
+  //   return;
+  // }
 }
 
 int traversal_toggle = 0;
+int counter = 0;
 
 void loop() {
 
   assignFromLoRa();
   assignFromPayload(payload);
   printValues();
+  
+  uart.write(payload, 12);
 
   if (mode_select_2 == 1) {
     traversal_toggle = !traversal_toggle;
@@ -238,16 +247,17 @@ void assignFromLoRa() {
     Serial.println(LoRa.packetFrequencyError());
 
     //sending the data through esp now to robotic arm
-    esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &payload, sizeof(payload));
+    //esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &payload, sizeof(payload));
 
-    if (result == ESP_OK) {
-    Serial.println("Sent with success");
-    }
-    else {
-      Serial.println("Error sending the data");
-    }
+    // if (result == ESP_OK) {
+    // Serial.println("Sent with success");
+    // }
+    // else {
+    //   Serial.println("Error sending the data");
+    // }
   }
 }
+
 
 void printValues() {
   Serial.print(joystick1_x); Serial.print(","); Serial.print(joystick1_y); Serial.print(","); Serial.print(Button1); Serial.println("  ");
@@ -275,7 +285,7 @@ void resetPayload(uint8_t payload[12]) {
   payload[11] = 128;
 }
 
-// movement functions
+//movement functions
 
 void forward(int speed, int delay_rate) { //add a speed argument when speed change is decided
   //speed = map(speed, 200, 255, 0, 255);

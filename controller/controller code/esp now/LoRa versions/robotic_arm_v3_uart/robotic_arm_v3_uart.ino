@@ -1,6 +1,5 @@
-#include <esp_now.h>
-#include <WiFi.h>
-#include <esp_wifi.h>
+#define RXD2 0
+#define TXD2 2
 
 uint8_t joystick1_x = 0;
 uint8_t joystick1_y = 0;
@@ -90,14 +89,14 @@ float predefinedAngles[][4] = {
   {260, 300, 240, 30}  // Predefined angle set 3
 };
 
-uint8_t newMACAddress[] = {0xEC, 0x64, 0xC9, 0x5E, 0x11, 0x3C}; //setting a new mac address
+//uint8_t newMACAddress[] = {0xEC, 0x64, 0xC9, 0x5E, 0x11, 0x3C}; //setting a new mac address
 
 // Callback function to handle received data
-void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
-  memcpy(&payload, incomingData, sizeof(payload));
-  Serial.print("Bytes received: ");
-  Serial.println(len);
-}
+// void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+//   memcpy(&payload, incomingData, sizeof(payload));
+//   Serial.print("Bytes received: ");
+//   Serial.println(len);
+// }
 
 char getJoystickCommand(uint8_t a, char axis, char positive, char negative) {
   if (a >= 0 && a < 5) {
@@ -199,21 +198,25 @@ void moveJoints(float b1, float b2, float b3, float b4) {
   }
 }
 
-void setup(){
-  Serial.begin(115200);
+HardwareSerial uart(2);
 
-  WiFi.mode(WIFI_STA);
+void setup(){
+
+  Serial.begin(115200);
+  uart.begin(115200, SERIAL_8N1, RXD2, TXD2);
+
+  //WiFi.mode(WIFI_STA);
 
   //Change ESP32 Mac Address
-  esp_err_t err = esp_wifi_set_mac(WIFI_IF_STA, &newMACAddress[0]);
-  if (err == ESP_OK) {
-    Serial.println("Success changing Mac Address");
-  }
+  // esp_err_t err = esp_wifi_set_mac(WIFI_IF_STA, &newMACAddress[0]);
+  // if (err == ESP_OK) {
+  //   Serial.println("Success changing Mac Address");
+  // }
 
-  if (esp_now_init() != ESP_OK) {
-    Serial.println("Error initializing ESP-NOW");
-    return;
-  }
+  // if (esp_now_init() != ESP_OK) {
+  //   Serial.println("Error initializing ESP-NOW");
+  //   return;
+  // }
 
   pinMode(dir1,OUTPUT);
   pinMode(p1,OUTPUT);
@@ -248,7 +251,7 @@ void setup(){
   
   //homing();
   // Register callback to receive data
-  esp_now_register_recv_cb(esp_now_recv_cb_t(OnDataRecv));
+  //esp_now_register_recv_cb(esp_now_recv_cb_t(OnDataRecv));
 }
 
 void readEncoder() {
@@ -264,6 +267,11 @@ int robotic_arm_toggle = 0;
 
 void loop() {
   
+  if (uart.available()) {
+    uart.readBytes(payload, 12);
+  }
+
+
   assignFromPayload(payload);
 
   printValues();
