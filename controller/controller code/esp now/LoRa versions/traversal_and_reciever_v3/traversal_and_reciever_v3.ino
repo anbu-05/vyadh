@@ -18,8 +18,8 @@ uint8_t joystick3_x = 0;
 uint8_t joystick3_y = 0;
 uint8_t Button3 = 0;
 
+uint8_t robotic_arm_position = 0;
 uint8_t mode_select = 0;
-uint8_t slide2 = 0;
 
 
 uint8_t payload[11];
@@ -27,7 +27,9 @@ uint8_t payload[11];
 esp_now_peer_info_t slave;
 
 int speed = 255;
-int delay_rate = 3; //delay between each gradual increase step
+int slow = 128;
+int fast_delay_rate = 3; //delay between each gradual increase step
+int slow_delay_rate = 1;
 
 // Pin definitions for LoRa SX1278
 #define ss 22         // Slave Select (NSS)
@@ -41,15 +43,15 @@ int delay_rate = 3; //delay between each gradual increase step
 #define D1 26
 
 void gradual_speed(int final_speed, int delay_rate, bool ifOn = 0) {
-  int gradual_increase_flag = 1;
+  int gradual_increase_flag = 0;
   if (ifOn){
     for (int speed = 0; speed < final_speed; speed++) {
       analogWrite(P1, speed);
       analogWrite(P2, speed);
-      //Serial.println(speed);
+      Serial.println(speed);
       delay(delay_rate);
       gradual_increase_flag = gradual_inrease_interrupt();
-      if (!gradual_increase_flag) {
+      if (gradual_increase_flag) {
         break;
       }
     }
@@ -59,18 +61,19 @@ void gradual_speed(int final_speed, int delay_rate, bool ifOn = 0) {
 }
 
 int gradual_inrease_interrupt() {
+
   assignFromLoRa();
   assignFromPayload(payload);
 
   if (joystick1_x >= 5 || joystick1_x <= 250) {
-    return 0;
+    return 1;
   }
 
   if (joystick1_y >= 5 || joystick1_y <= 250) {
-    return 0;
+    return 1;
   }
 
-  return 1;
+  return 0;
 }
 
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
@@ -129,37 +132,53 @@ void loop() {
 
   assignFromLoRa();
   assignFromPayload(payload);
-
-  //traversal code
-  //printing the joystick values: - comment this if the rx tx port is needed
-  Serial.println("payload:");
-  Serial.print(joystick1_x); Serial.print(", "); Serial.print(joystick1_y);  Serial.print(", "); Serial.println(Button1);
-  Serial.print(joystick2_x); Serial.print(", "); Serial.print(joystick2_y);  Serial.print(", "); Serial.println(Button2);
-  Serial.print(joystick3_x); Serial.print(", "); Serial.print(joystick3_y);  Serial.print(", "); Serial.println(Button3);
-  Serial.print(mode_select); Serial.print(", "); Serial.println(slide2);
-
-  Serial.println("  ");
-  Serial.println("  ");
-  Serial.println("  ");
+  printValues();
 
   if (joystick1_x <= 5) {
     Serial.println("left");
-    left(speed);
+    left(speed, fast_delay_rate);
   }
 
   else if (joystick1_x >= 250) {
     Serial.println("right");
-    right(speed);
+    right(speed, fast_delay_rate);
   }
   
   else if (joystick1_y >= 250) {
     Serial.println("backward");
-    backward(speed);
+    backward(speed, fast_delay_rate);
   }
 
   else if (joystick1_y <= 5) {
     Serial.println("forward");
-    forward(speed);
+    forward(speed, fast_delay_rate);
+  }
+
+  else {
+    Serial.println("stopped");
+    stop();
+  }
+
+// slow control
+
+  if (joystick2_x <= 5) {
+    Serial.println("left");
+    left(slow, slow_delay_rate);
+  }
+
+  else if (joystick2_x >= 250) {
+    Serial.println("right");
+    right(slow, slow_delay_rate);
+  }
+  
+  else if (joystick2_y >= 250) {
+    Serial.println("backward");
+    backward(slow, slow_delay_rate);
+  }
+
+  else if (joystick2_y <= 5) {
+    Serial.println("forward");
+    forward(slow, slow_delay_rate);
   }
 
   else {
@@ -169,8 +188,8 @@ void loop() {
 }
 
 void assignFromPayload(uint8_t payload[11]) {
-  slide2 = payload[0];
-  mode_select = payload[1];
+  mode_select = payload[0];
+  robotic_arm_position = payload[1];
 
   Button3 = payload[2];
   joystick3_y = payload[3];
@@ -216,6 +235,18 @@ void assignFromLoRa() {
   }
 }
 
+void printValues() {
+  Serial.println("payload:");
+  Serial.print(joystick1_x); Serial.print(", "); Serial.print(joystick1_y);  Serial.print(", "); Serial.println(Button1);
+  Serial.print(joystick2_x); Serial.print(", "); Serial.print(joystick2_y);  Serial.print(", "); Serial.println(Button2);
+  Serial.print(joystick3_x); Serial.print(", "); Serial.print(joystick3_y);  Serial.print(", "); Serial.println(Button3);
+  Serial.print(robotic_arm_position); Serial.print(", "); Serial.println(mode_select);
+
+  Serial.println("  ");
+  Serial.println("  ");
+  Serial.println("  ");
+}
+
 void resetPayload(uint8_t payload[11]) {
   payload[0] = 0;
   payload[1] = 0;
@@ -230,8 +261,9 @@ void resetPayload(uint8_t payload[11]) {
   payload[10] = 128;
 }
 
+// movement functions
 
-void forward(uint8_t speed) { //add a speed argument when speed change is decided
+void forward(int speed, int delay_rate) { //add a speed argument when speed change is decided
   //speed = map(speed, 200, 255, 0, 255);
   digitalWrite(D1, HIGH);
   digitalWrite(D2, LOW);
@@ -239,7 +271,7 @@ void forward(uint8_t speed) { //add a speed argument when speed change is decide
   gradual_speed(speed, delay_rate, 1);
 }
 
-void backward(uint8_t speed) { //add a speed argument when speed change is decided
+void backward(int speed, int delay_rate) { //add a speed argument when speed change is decided
   //speed = map(speed, 50, 0, 0, 255);
   digitalWrite(D1, LOW);
   digitalWrite(D2, HIGH);
@@ -248,7 +280,7 @@ void backward(uint8_t speed) { //add a speed argument when speed change is decid
 }
 
 
-void right(uint8_t speed) { //add a speed argument when speed change is decided
+void right(int speed, int delay_rate) { //add a speed argument when speed change is decided
   //speed = map(speed, 200, 255, 0, 255);
   digitalWrite(D1, HIGH);
   digitalWrite(D2, HIGH);
@@ -257,7 +289,7 @@ void right(uint8_t speed) { //add a speed argument when speed change is decided
 }
 
 
-void left(uint8_t speed) { //add a speed argument when speed change is decided
+void left(int speed, int delay_rate) { //add a speed argument when speed change is decided
   //speed = map(speed, 50, 0, 0, 255);
   digitalWrite(D1, LOW);
   digitalWrite(D2, LOW);
@@ -270,6 +302,6 @@ void stop() { //add a speed argument when speed change is decided
   digitalWrite(D1, HIGH);
   digitalWrite(D2, HIGH);
 
-  gradual_speed(0, delay_rate, 1);
+  gradual_speed(0, 1, 1);
 }
 

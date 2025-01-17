@@ -259,30 +259,21 @@ void readEncoder() {
   }
 }
 
-int robotic_arm_toggle = 0;
+int robotic_arm_position = 0;
 
 void loop() {
   
   assignFromPayload(payload);
 
-  // Print received payload data
-  Serial.println("payload:");
-  Serial.print(joystick1_x); Serial.print(", "); Serial.print(joystick1_y);  Serial.print(", "); Serial.println(Button1);
-  Serial.print(joystick2_x); Serial.print(", "); Serial.print(joystick2_y);  Serial.print(", "); Serial.println(Button2);
-  Serial.print(joystick3_x); Serial.print(", "); Serial.print(joystick3_y);  Serial.print(", "); Serial.println(Button3);
-  Serial.print(mode_select); Serial.print(", "); Serial.println(slide2);
-
-  Serial.println("  ");
-  Serial.println("  ");
-  Serial.println("  ");
+  printValues();
 
   if (mode_select == 36) {
-    robotic_arm_toggle = !robotic_arm_toggle;
+    robotic_arm_position = !robotic_arm_position;
   }
 
-  Serial.println("toggle: " + String(robotic_arm_toggle));
+  Serial.println("toggle: " + String(robotic_arm_position));
 
-  if (robotic_arm_toggle) {
+  if (robotic_arm_position) {
     //reading potentiometer values;
 
     char horizontal1Command = getJoystickCommand(joystick1_x, 'x', 't', 'g');
@@ -512,6 +503,18 @@ void resetPayload(uint8_t payload[11]) {
   payload[8] = 0;
   payload[9] = 128;
   payload[10] = 128;
+}
+
+void printValues() {
+  Serial.println("payload:");
+  Serial.print(joystick1_x); Serial.print(", "); Serial.print(joystick1_y);  Serial.print(", "); Serial.println(Button1);
+  Serial.print(joystick2_x); Serial.print(", "); Serial.print(joystick2_y);  Serial.print(", "); Serial.println(Button2);
+  Serial.print(joystick3_x); Serial.print(", "); Serial.print(joystick3_y);  Serial.print(", "); Serial.println(Button3);
+  Serial.print(robotic_arm_position); Serial.print(", "); Serial.println(mode_select);
+
+  Serial.println("  ");
+  Serial.println("  ");
+  Serial.println("  ");
 }
 
 // void homing() {
