@@ -135,7 +135,7 @@ void loop() {
       (joystick3_y >= joystick_idle_min && joystick3_y <= joystick_idle_max);
 
   bool buttons_and_slides_untouched =
-      (Button1 == LOW) && (Button2 == LOW) && (Button3 == LOW) &&
+      (Button1 == HIGH) && (Button2 == HIGH) && (Button3 == HIGH) &&
       (robotic_arm_position == LOW) && (mode_select == LOW) && (mode_select_2 == LOW) && (mode_select_3 == LOW);
 
   // Only send data if there's a change

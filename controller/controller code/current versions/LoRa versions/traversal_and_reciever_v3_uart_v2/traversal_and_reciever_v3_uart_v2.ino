@@ -48,16 +48,17 @@ int traversal_toggle = 0;
 int robarm_toggle = 0;
 int science_toggle = 0;
 
+
 void gradual_speed(int final_speed, int delay_rate, bool ifOn = 0) {
-  int gradual_increase_flag = 0;
+  int gradual_increase_interrupt_flag = 0;
   if (ifOn){
     for (int speed = 0; speed < final_speed; speed++) {
       analogWrite(P1, speed);
       analogWrite(P2, speed);
       Serial.println(speed);
       delay(delay_rate);
-      gradual_increase_flag = gradual_inrease_interrupt();
-      if (gradual_increase_flag) {
+      gradual_increase_interrupt_flag = gradual_inrease_interrupt();
+      if (gradual_increase_interrupt_flag) {
         break;
       }
     }
@@ -136,6 +137,8 @@ void setup() {
   // }
 }
 
+//int command_changed = 0;
+
 void loop() {
 
   assignFromLoRa();
@@ -144,10 +147,16 @@ void loop() {
 
   if (mode_select == 1){
       robarm_toggle = !robarm_toggle;
+      if (robarm_toggle) {
+        traversal_toggle = 0;
+      }
     }
 
   if (mode_select_2 == 1) {
     traversal_toggle = !traversal_toggle;
+    if (traversal_toggle) {
+      robarm_toggle = 0;
+    }
   }
 
   if (mode_select_3 == 1) {
@@ -160,54 +169,66 @@ void loop() {
 
   if (traversal_toggle) {
   //fast control
-    if (joystick1_x <= 5) {
+    if (joystick1_x <= 5 /*&& //command_changed*/) {
+      //command_changed = 0;
+      Serial.println("fast");
       Serial.println("left");
       left(speed, fast_delay_rate);
     }
 
-    else if (joystick1_x >= 250) {
+    else if (joystick1_x >= 250 /*&& //command_changed*/) {
+      //command_changed = 0;
+      Serial.println("fast");
       Serial.println("right");
       right(speed, fast_delay_rate);
     }
     
-    else if (joystick1_y >= 250) {
+    else if (joystick1_y >= 250 /*&& //command_changed*/) {
+      //command_changed = 0;
+      Serial.println("fast");
       Serial.println("backward");
       backward(speed, fast_delay_rate);
     }
 
-    else if (joystick1_y <= 5) {
+    else if (joystick1_y <= 5 /*&& //command_changed*/) {
+      //command_changed = 0;
+      Serial.println("fast");
       Serial.println("forward");
       forward(speed, fast_delay_rate);
     }
 
-    else {
-      Serial.println("stopped");
-      stop();
-    }
-
   //slow control
 
-    if (joystick2_x <= 5) {
+    else if (joystick2_x <= 5 /*&& //command_changed*/) {
+      //command_changed = 0;
+      Serial.println("slow");
       Serial.println("left");
       left(slow, slow_delay_rate);
     }
 
-    else if (joystick2_x >= 250) {
+    else if (joystick2_x >= 250 /*&& //command_changed*/) {
+      //command_changed = 0;
+      Serial.println("slow");
       Serial.println("right");
       right(slow, slow_delay_rate);
     }
     
-    else if (joystick2_y >= 250) {
+    else if (joystick2_y >= 250 /*&& //command_changed*/) {
+      //command_changed = 0;
+      Serial.println("slow");
       Serial.println("backward");
       backward(slow, slow_delay_rate);
     }
 
-    else if (joystick2_y <= 5) {
+    else if (joystick2_y <= 5 /*&& //command_changed*/) {
+      //command_changed = 0;
+      Serial.println("slow");
       Serial.println("forward");
       forward(slow, slow_delay_rate);
     }
 
     else {
+      //command_changed = 1;
       Serial.println("stopped");
       stop();
     }
@@ -306,7 +327,7 @@ void forward(int speed, int delay_rate) { //add a speed argument when speed chan
   digitalWrite(D1, HIGH);
   digitalWrite(D2, LOW);
 
-  gradual_speed(speed, delay_rate, 1);
+  gradual_speed(speed, delay_rate, 0);
 }
 
 void backward(int speed, int delay_rate) { //add a speed argument when speed change is decided
@@ -314,7 +335,7 @@ void backward(int speed, int delay_rate) { //add a speed argument when speed cha
   digitalWrite(D1, LOW);
   digitalWrite(D2, HIGH);
 
-  gradual_speed(speed, delay_rate, 1);
+  gradual_speed(speed, delay_rate, 0);
 }
 
 
@@ -323,7 +344,7 @@ void right(int speed, int delay_rate) { //add a speed argument when speed change
   digitalWrite(D1, HIGH);
   digitalWrite(D2, HIGH);
 
-  gradual_speed(speed, delay_rate, 1);
+  gradual_speed(speed, delay_rate, 0);
 }
 
 
@@ -332,7 +353,7 @@ void left(int speed, int delay_rate) { //add a speed argument when speed change 
   digitalWrite(D1, LOW);
   digitalWrite(D2, LOW);
 
-  gradual_speed(speed, delay_rate, 1);
+  gradual_speed(speed, delay_rate, 0);
 }
 
 
@@ -340,7 +361,8 @@ void stop() { //add a speed argument when speed change is decided
   digitalWrite(D1, HIGH);
   digitalWrite(D2, HIGH);
 
-  gradual_speed(0, 1, 1);
+  analogWrite(P1, 0);
+  analogWrite(P2, 0);
 }
 
 char getJoystickCommand(uint8_t a, char axis, char positive, char negative) {
@@ -361,23 +383,31 @@ String encodeRoboticArm(){
     char vertical2Command = getJoystickCommand(joystick2_y, 'x', 'u', 'j');
     char vertical3Command = getJoystickCommand(joystick3_y, 'x', 'w', 's');
 
-    if (robotic_arm_position >= 160 && robotic_arm_position <= 180) {
-      return "p1--";
+    // if (robotic_arm_position >= 160 && robotic_arm_position <= 180) {
+    //   return "p1--";
+    // }
+
+    // else if (robotic_arm_position >= 110 && robotic_arm_position <= 130) {
+    //   return "p2--";
+    // }
+
+    // else if (robotic_arm_position >= 25 && robotic_arm_position <= 40) {
+    //   return "p3--";
+    // }
+
+    if (Button3 == 0) {
+      return "w--i";
     }
 
-    else if (robotic_arm_position >= 110 && robotic_arm_position <= 130) {
-      return "p2--";
+    else if (Button2 == 0) {
+      return "w--k";
     }
 
-    else if (robotic_arm_position >= 25 && robotic_arm_position <= 40) {
-      return "p3--";
-    }
+    // else if (Button1 == 0) {
+    //   return "w--o";
+    // }
 
-    else if (Button3 == 0) {
-      return "w--e";
-    }
-
-    else{
+    else {
       switch (vertical1Command) {
         case 't':
           return "r-t-";

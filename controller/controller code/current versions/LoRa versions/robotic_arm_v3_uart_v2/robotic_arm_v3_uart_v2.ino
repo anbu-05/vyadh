@@ -48,7 +48,7 @@ int pwm_ef = 150; // not const because it changes
 const int pwm_homing = 80;
 const int pwm = 200;
 const int pwm_tt = 60;
-const int pwm_gripper = 80;
+const int pwm_gripper = 160;
 
 float b1; 
 float b2; 
@@ -172,6 +172,9 @@ HardwareSerial uart(2);
 void setup(){
   Serial.begin(115200);
   uart.begin(115200, SERIAL_8N1, RXD2, TXD2);
+  pinMode(pwmtt, OUTPUT);
+  pinMode(dirtt, OUTPUT);
+  ledcAttachChannel(pwmtt,freq, resolution, 0);
 
   pinMode(dir1,OUTPUT);
   pinMode(p1,OUTPUT);
@@ -192,6 +195,10 @@ void setup(){
   pinMode(pwmw2,OUTPUT);
   pinMode(dirw2,OUTPUT);
   ledcAttachChannel(pwmw2, freq, resolution, 5);
+
+  pinMode(pwmg, OUTPUT);
+  pinMode(dirg, OUTPUT);
+  ledcAttachChannel(pwmg,freq, resolution, 6);
 
   pinMode(encA,INPUT);
   pinMode(encB,INPUT);
@@ -223,7 +230,7 @@ char inputChar = 'x';
 void loop() {
   if (uart.available()) {
     recievedString =  uart.readStringUntil('\n');
-  }
+  
 
   if (recievedString != previous_recievedString) {
     Serial.println("change");
@@ -291,12 +298,20 @@ void loop() {
   else if (inputChar != '1' && inputChar != '2' && inputChar != '3'){
     switch (inputChar) {
       case 'r':
+        for(int i = 0; i < pwm_tt; i = i+5){
+          ledcWrite(pwmg,i);
+          delay(5);
+        }
         Serial.println("r");
         digitalWrite(dirtt, HIGH);
         ledcWrite(pwmtt, pwm_tt);
         break;
 
       case 'f':
+        for(int i = 0; i < pwm_tt; i = i+5){
+          ledcWrite(pwmg,i);
+          delay(5);
+        }
         Serial.println("f");
         digitalWrite(dirtt, LOW);
         ledcWrite(pwmtt, pwm_tt);
@@ -394,30 +409,14 @@ void loop() {
         }
         break;
 
-      case 'e':
-        switch (gripState) {
-          case 0: // Open gripper (HIGH direction)
-            digitalWrite(dirg, HIGH);
-            ledcWrite(pwmg, pwm_gripper);
-            Serial.println("Gripper opening");
-            break;
+      case 'i':
+        digitalWrite(dirg, HIGH);
+        ledcWrite(pwmg, pwm_gripper);
+        break;
 
-          case 1: // Stop motor
-            ledcWrite(pwmg, 0);
-            Serial.println("Motor stopped");
-            break;
-
-          case 2: // Close gripper (LOW direction)
-            digitalWrite(dirg, LOW);
-            ledcWrite(pwmg, pwm_gripper);
-            Serial.println("Gripper closing");
-            break;
-
-          case 3: // Stop motor
-            ledcWrite(pwmg, 0);
-            Serial.println("Motor stopped");
-            break;
-        }
+      case 'k':
+        digitalWrite(dirtt, LOW);
+        ledcWrite(pwmg, pwm_gripper);
         break;
 
       case 'x':
@@ -438,7 +437,7 @@ void loop() {
     }
   }
 
-    
+  }
   
 }
 
