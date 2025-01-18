@@ -373,6 +373,10 @@ String encodeRoboticArm(){
       return "p3--";
     }
 
+    else if (Button3 == 0) {
+      return "w--e";
+    }
+
     else{
       switch (vertical1Command) {
         case 't':
@@ -381,6 +385,19 @@ String encodeRoboticArm(){
 
         case 'g':
           return "r-g-";
+          break;
+
+        case 'x':
+          break;
+      }
+
+      switch (horizontal1Command) {
+        case 'r':
+          return "r-r-";
+          break;
+
+        case 'f':
+          return "r-f-";
           break;
 
         case 'x':
