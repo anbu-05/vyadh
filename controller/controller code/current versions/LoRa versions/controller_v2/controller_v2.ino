@@ -29,6 +29,11 @@
 #define ra_pos 13
 #define mde_slct 22
 #define mde_slct_2 21
+#define mde_slct_3 16
+
+// #define t_LED 27
+// #define r_LED 14
+// #define s_LED 12
 
 
 
@@ -39,22 +44,23 @@ void setup() {
   // Joystick 1
   pinMode(joy1_x, INPUT);
   pinMode(joy1_y, INPUT);
-  pinMode(but1, INPUT_PULLDOWN);
+  pinMode(but1, INPUT);
 
   // Joystick 2
   pinMode(joy2_x, INPUT);
   pinMode(joy2_y, INPUT);
-  pinMode(but2, INPUT_PULLDOWN);
+  pinMode(but2, INPUT);
 
   //joystick 3
   pinMode(joy3_x, INPUT);
   pinMode(joy3_y, INPUT);
-  pinMode(but3, INPUT_PULLDOWN);
+  pinMode(but3, INPUT);
 
   //slide switches
   pinMode(ra_pos, INPUT);
   pinMode(mde_slct, INPUT);
   pinMode(mde_slct_2, INPUT);
+  pinMode(mde_slct_3, INPUT);
 
   Serial.begin(115200);
   Serial.println("begin");
@@ -88,11 +94,12 @@ uint8_t Button3;
 uint8_t robotic_arm_position;
 uint8_t mode_select;
 uint8_t mode_select_2;
+uint8_t mode_select_3;
 
 const uint8_t joystick_idle_min = 120; // Minimum idle value
 const uint8_t joystick_idle_max = 135; // Maximum idle value
 
-uint8_t payload[12];
+uint8_t payload[13];
 
 void loop() {
 
@@ -114,6 +121,7 @@ void loop() {
   robotic_arm_position = analogRead(ra_pos) >> 4;
   mode_select = digitalRead(mde_slct);
   mode_select_2 = digitalRead(mde_slct_2);
+  mode_select_3 = digitalRead(mde_slct_3);
 
   printValues();
 
@@ -128,7 +136,7 @@ void loop() {
 
   bool buttons_and_slides_untouched =
       (Button1 == LOW) && (Button2 == LOW) && (Button3 == LOW) &&
-      (robotic_arm_position == LOW) && (mode_select == LOW) && (mode_select_2 == LOW);
+      (robotic_arm_position == LOW) && (mode_select == LOW) && (mode_select_2 == LOW) && (mode_select_3 == LOW);
 
   // Only send data if there's a change
   if (!joysticks_untouched || !buttons_and_slides_untouched) {
@@ -150,7 +158,7 @@ void loop() {
   }
 }
 
-void assignToPayload(uint8_t payload[12]) {
+void assignToPayload(uint8_t payload[13]) {
   payload[0] = joystick1_x;
   payload[1] = joystick1_y;
   payload[2] = Button1;
@@ -166,13 +174,14 @@ void assignToPayload(uint8_t payload[12]) {
   payload[9] = robotic_arm_position;
   payload[10] = mode_select;
   payload[11] = mode_select_2;
+  payload[12] = mode_select_3;
 }
 
 void printValues() {
   Serial.print(joystick1_x); Serial.print(","); Serial.print(joystick1_y); Serial.print(","); Serial.print(Button1); Serial.println("  ");
   Serial.print(joystick2_x); Serial.print(","); Serial.print(joystick2_y); Serial.print(","); Serial.print(Button2); Serial.println("  ");
   Serial.print(joystick3_x); Serial.print(","); Serial.print(joystick3_y); Serial.print(","); Serial.print(Button3); Serial.println("  ");
-  Serial.print(robotic_arm_position); Serial.print(","); Serial.print(mode_select); Serial.print(","); Serial.print(mode_select_2); Serial.println("  ");
+  Serial.print(robotic_arm_position); Serial.print(","); Serial.print(mode_select); Serial.print(","); Serial.print(mode_select_2); Serial.print(","); Serial.print(mode_select_3); Serial.println("  "); 
 
   Serial.println("  ");
   Serial.println("  ");

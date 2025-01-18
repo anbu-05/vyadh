@@ -21,9 +21,10 @@ uint8_t Button3 = 0;
 uint8_t robotic_arm_position = 0;
 uint8_t mode_select = 0;
 uint8_t mode_select_2 = 0;
+uint8_t mode_select_3 = 0;
 
 
-uint8_t payload[12];
+uint8_t payload[13];
 
 //esp_now_peer_info_t slave;
 
@@ -45,6 +46,7 @@ int slow_delay_rate = 1;
 
 int traversal_toggle = 0;
 int robarm_toggle = 0;
+int science_toggle = 0;
 
 void gradual_speed(int final_speed, int delay_rate, bool ifOn = 0) {
   int gradual_increase_flag = 0;
@@ -140,16 +142,21 @@ void loop() {
   assignFromPayload(payload);
   printValues();
 
+  if (mode_select == 1){
+      robarm_toggle = !robarm_toggle;
+    }
+
   if (mode_select_2 == 1) {
     traversal_toggle = !traversal_toggle;
   }
 
-  if (mode_select == 1){
-    robarm_toggle = !robarm_toggle;
+  if (mode_select_3 == 1) {
+    science_toggle = !science_toggle;
   }
 
   Serial.println("traversal toggle: " + String(traversal_toggle));
   Serial.println("robotic arm toggle: " + String(robarm_toggle));
+  Serial.println("science toggle: " + String(science_toggle));
 
   if (traversal_toggle) {
   //fast control
@@ -215,22 +222,23 @@ void loop() {
 
 }
 
-void assignFromPayload(uint8_t payload[12]) {
-  mode_select_2 = payload[0];
-  mode_select = payload[1];
-  robotic_arm_position = payload[2];
+void assignFromPayload(uint8_t payload[13]) {
+  mode_select_3 = payload[0];
+  mode_select_2 = payload[1];
+  mode_select = payload[2];
+  robotic_arm_position = payload[3];
 
-  Button3 = payload[3];
-  joystick3_y = payload[4];
-  joystick3_x = payload[5];
+  Button3 = payload[4];
+  joystick3_y = payload[5];
+  joystick3_x = payload[6];
 
-  Button2 = payload[6];
-  joystick2_y = payload[7];
-  joystick2_x = payload[8];
+  Button2 = payload[7];
+  joystick2_y = payload[8];
+  joystick2_x = payload[9];
 
-  Button1 = payload[9];
-  joystick1_y = payload[10];
-  joystick1_x = payload[11];
+  Button1 = payload[10];
+  joystick1_y = payload[11];
+  joystick1_x = payload[12];
 }
 
 void assignFromLoRa() {
@@ -268,26 +276,27 @@ void printValues() {
   Serial.print(joystick1_x); Serial.print(","); Serial.print(joystick1_y); Serial.print(","); Serial.print(Button1); Serial.println("  ");
   Serial.print(joystick2_x); Serial.print(","); Serial.print(joystick2_y); Serial.print(","); Serial.print(Button2); Serial.println("  ");
   Serial.print(joystick3_x); Serial.print(","); Serial.print(joystick3_y); Serial.print(","); Serial.print(Button3); Serial.println("  ");
-  Serial.print(robotic_arm_position); Serial.print(","); Serial.print(mode_select); Serial.print(","); Serial.print(mode_select_2); Serial.println("  ");
+  Serial.print(robotic_arm_position); Serial.print(","); Serial.print(mode_select); Serial.print(","); Serial.print(mode_select_2); Serial.print(","); Serial.print(mode_select_3); Serial.println("  "); 
 
   Serial.println("  ");
   Serial.println("  ");
   Serial.println("  ");
 }
 
-void resetPayload(uint8_t payload[12]) {
+void resetPayload(uint8_t payload[13]) {
   payload[0] = 0;
   payload[1] = 0;
   payload[2] = 0;
   payload[3] = 0;
-  payload[4] = 128;
+  payload[4] = 0;
   payload[5] = 128;
-  payload[6] = 0;
-  payload[7] = 128;
+  payload[6] = 128;
+  payload[7] = 0;
   payload[8] = 128;
-  payload[9] = 0;
-  payload[10] = 128;
+  payload[9] = 128;
+  payload[10] = 0;
   payload[11] = 128;
+  payload[12] = 128;
 }
 
 //movement functions
