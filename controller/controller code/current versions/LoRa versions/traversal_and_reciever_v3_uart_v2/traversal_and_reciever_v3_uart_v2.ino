@@ -1,8 +1,6 @@
 #include <SPI.h>
 #include <LoRa.h>
 
-//uint8_t broadcastAddress[] = {0xEC, 0x64, 0xC9, 0x5E, 0x11, 0x3C}; //reciever's MAC address, (this is sender's code)
-
 #define RXD2 17
 #define TXD2 16
 
@@ -23,16 +21,20 @@ uint8_t mode_select = 0;
 uint8_t mode_select_2 = 0;
 uint8_t mode_select_3 = 0;
 
+//toggles
+
+uint8_t prev_robotic_arm_position = 0;
+uint8_t prev_mode_select = 0;
+uint8_t prev_mode_select_2 = 0;
+uint8_t prev_mode_select_3 = 0;
+
 
 uint8_t payload[13];
 
-//esp_now_peer_info_t slave;
 
 int fast = 255;
 int slow = 128;
 int speed = 0;
-// int fast_delay_rate = 3; //delay between each gradual increase step
-// int slow_delay_rate = 1;
 
 // Pin definitions for LoRa SX1278
 #define ss 22         // Slave Select (NSS)
@@ -48,28 +50,6 @@ int speed = 0;
 int traversal_toggle = 1;
 int robarm_toggle = 0;
 int science_toggle = 0;
-
-
-int gradual_inrease_interrupt() {
-
-  assignFromLoRa();
-  assignFromPayload(payload);
-
-  if (joystick1_x >= 5 || joystick1_x <= 250) {
-    return 1;
-  }
-
-  if (joystick1_y >= 5 || joystick1_y <= 250) {
-    return 1;
-  }
-
-  return 0;
-}
-
-// void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-//   Serial.print("Transmission Status: ");
-//   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
-// }
 
 HardwareSerial uart(1);
 
@@ -99,57 +79,51 @@ void setup() {
 
   assignFromPayload(payload);
   resetPayload(payload);
-
-  // WiFi.mode(WIFI_STA);
-  
-  // if (esp_now_init() != ESP_OK) {
-  //   Serial.println("Error initializing ESP-NOW");
-  //   return;
-  // }
-
-  // esp_now_register_send_cb(OnDataSent);
-  
-  // //Register peer
-  // memcpy(slave.peer_addr, broadcastAddress, 6);
-  // slave.channel = 0;
-  // slave.encrypt = false;
-
-  // if (esp_now_add_peer(&slave) != ESP_OK){
-  //   Serial.println("Failed to add peer");
-  //   return;
-  // }
 }
-
-//int command_changed = 0;
 
 void loop() {
 
   assignFromLoRa();
   assignFromPayload(payload);
   printValues();
-  
+
+//mode select
   if (mode_select == 1) {
-    traversal_toggle = !traversal_toggle;
+    if (mode_select != prev_mode_select) {
+      traversal_toggle = !traversal_toggle;
+      prev_mode_select = mode_select;
+    }
     if (traversal_toggle) {
       robarm_toggle = 0;
     }
   }
 
   if (mode_select_2 == 1){
-        robarm_toggle = !robarm_toggle;
-        if (robarm_toggle) {
-          traversal_toggle = 0;
-        }
-      }
-
-  if (mode_select_3 == 1) {
-    science_toggle = !science_toggle;
+    if (mode_select_2 != prev_mode_select_2) {
+      robarm_toggle = !robarm_toggle;
+      prev_mode_select_2 = mode_select_2;
+    }
+    if (robarm_toggle) {
+      traversal_toggle = 0;
+    }
   }
 
+  if (mode_select_3 == 1) {
+    if (mode_select_3 != prev_mode_select_3) {
+      science_toggle = !science_toggle;
+      prev_mode_select_3 = mode_select_3;
+    }
+    if (science_toggle) {
+      traversal_toggle = 0;
+      robarm_toggle = 0;
+    }
+  }
+//
   Serial.println("traversal toggle: " + String(traversal_toggle));
   Serial.println("robotic arm toggle: " + String(robarm_toggle));
   Serial.println("science toggle: " + String(science_toggle));
 
+//traversal
   if (traversal_toggle) {
   //fast control
     if (joystick1_x <= 5) {
@@ -206,8 +180,9 @@ void loop() {
       Serial.println("stopped");
       stop();
     }
-  } 
+  }
 
+//robotic arm
   if(robarm_toggle) {
     Serial.println("sending robotic arm");
     String prnt = encodeRoboticArm();
@@ -215,6 +190,13 @@ void loop() {
     Serial.println(prnt);
   }
 
+//science kit
+  if(robarm_toggle) {
+    Serial.println("sending science kit");
+    String prnt = encodeScienceKit();
+    uart.println(prnt);
+    Serial.println(prnt);
+  }
 }
 
 void assignFromPayload(uint8_t payload[13]) {
@@ -254,16 +236,6 @@ void assignFromLoRa() {
     Serial.print("RSSI: ");
     Serial.println(LoRa.packetRssi());
     Serial.println(LoRa.packetFrequencyError());
-
-    //sending the data through esp now to robotic arm
-    //esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &payload, sizeof(payload));
-
-    // if (result == ESP_OK) {
-    // Serial.println("Sent with success");
-    // }
-    // else {
-    //   Serial.println("Error sending the data");
-    // }
   }
 }
 
@@ -293,27 +265,6 @@ void resetPayload(uint8_t payload[13]) {
   payload[11] = 128;
   payload[12] = 128;
 }
-
-//movement functions
-
-
-// void gradual_speed(int final_speed, int delay_rate, bool ifOn = 0) {
-//   int gradual_increase_interrupt_flag = 0;
-//   if (ifOn){
-//     for (int speed = 0; speed < final_speed; speed++) {
-//       analogWrite(P1, speed);
-//       analogWrite(P2, speed);
-//       Serial.println(speed);
-//       delay(delay_rate);
-//       gradual_increase_interrupt_flag = gradual_inrease_interrupt();
-//       if (gradual_increase_interrupt_flag) {
-//         break;
-//       }
-//     }
-//   }
-//   analogWrite(P1, final_speed);
-//   analogWrite(P2, final_speed);
-// }
 
 
 void forward(int select_speed) { //add a speed argument when speed change is decided
@@ -410,6 +361,7 @@ void stop() { //add a speed argument when speed change is decided
   }
 }
 
+
 char getJoystickCommand(uint8_t a, char axis, char positive, char negative) {
   if (a >= 0 && a < 5) {
     return negative; // Left or down movement
@@ -419,7 +371,9 @@ char getJoystickCommand(uint8_t a, char axis, char positive, char negative) {
   return axis; // Neutral position
 }
 
-String encodeRoboticArm(){
+int robotic_arm_position_timer = 0;
+
+String encodeRoboticArm() {
     char horizontal1Command = getJoystickCommand(joystick1_x, 'x', 'f', 'r');
     char horizontal2Command = getJoystickCommand(joystick2_x, 'x', 'y', 'h');
     char horizontal3Command = getJoystickCommand(joystick3_x, 'x', 'd', 'a');
@@ -428,38 +382,49 @@ String encodeRoboticArm(){
     char vertical2Command = getJoystickCommand(joystick2_y, 'x', 'u', 'j');
     char vertical3Command = getJoystickCommand(joystick3_y, 'x', 'w', 's');
 
-    // if (robotic_arm_position >= 160 && robotic_arm_position <= 180) {
-    //   return "p1--";
-    // }
+    if (robotic_arm_position >= 160 && robotic_arm_position <= 180) {
+      robotic_arm_position_timer++;
+      Serial.println("command timer: " + robotic_arm_position_timer);
+      if (robotic_arm_position_timer > 5) {
+        robotic_arm_position_timer = 0;
+        return "1";
+      }
+    }
 
-    // else if (robotic_arm_position >= 110 && robotic_arm_position <= 130) {
-    //   return "p2--";
-    // }
+    else if (robotic_arm_position >= 110 && robotic_arm_position <= 130) {
+      robotic_arm_position_timer++;
+      Serial.println("command timer: " + robotic_arm_position_timer);
+      if (robotic_arm_position_timer > 5) {
+        robotic_arm_position_timer = 0;
+        return "2";
+      }
+    }
 
-    // else if (robotic_arm_position >= 25 && robotic_arm_position <= 40) {
-    //   return "p3--";
-    // }
+    else if (robotic_arm_position >= 25 && robotic_arm_position <= 40) {
+      robotic_arm_position_timer++;
+      Serial.println("command timer: " + robotic_arm_position_timer);
+      if (robotic_arm_position_timer > 5) {
+        robotic_arm_position_timer = 0;
+        return "3";
+      }
+    }
 
-    if (Button3 == 0) {
-      return "w--i";
+    else if (Button3 == 0) {
+      return "i";
     }
 
     else if (Button2 == 0) {
-      return "w--k";
+      return "k";
     }
-
-    // else if (Button1 == 0) {
-    //   return "w--o";
-    // }
 
     else {
       switch (vertical1Command) {
         case 't':
-          return "r-t-";
+          return "t";
           break;
 
         case 'g':
-          return "r-g-";
+          return "g";
           break;
 
         case 'x':
@@ -468,11 +433,11 @@ String encodeRoboticArm(){
 
       switch (horizontal1Command) {
         case 'r':
-          return "r-r-";
+          return "r";
           break;
 
         case 'f':
-          return "r-f-";
+          return "f";
           break;
 
         case 'x':
@@ -481,11 +446,11 @@ String encodeRoboticArm(){
 
       switch (horizontal2Command) {
         case 'y':
-          return "r-y-";
+          return "y";
           break;
 
         case 'h':
-          return "r-h-";
+          return "h";
           break;
 
         case 'x':
@@ -494,11 +459,11 @@ String encodeRoboticArm(){
 
       switch (vertical2Command) {
         case 'u':
-          return "r-u-";
+          return "u";
           break;
 
         case 'j':
-          return "r-j-";
+          return "j";
           break;
 
         case 'x':
@@ -507,11 +472,11 @@ String encodeRoboticArm(){
 
       switch (vertical3Command) {
         case 'w':
-          return "w--w";
+          return "w";
           break;
 
         case 's':
-          return "w--s";
+          return "s";
           break;
 
         case 'x':
@@ -520,11 +485,11 @@ String encodeRoboticArm(){
 
     switch (horizontal3Command) {
       case 'a':
-        return "w--a";
+        return "a";
         break;
 
       case 'd':
-        return "w--d";
+        return "d";
         break;
 
       case 'x':
@@ -532,5 +497,17 @@ String encodeRoboticArm(){
     }
   }
 
-  return "x---";
+  return "x";
+}
+
+String encodeScienceKit() {
+  if (Button1 == 0) {
+      return "p";
+    }
+
+  else if (Button2 == 0) {
+    return "l";
+  }
+  
+  return "x";
 }
