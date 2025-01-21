@@ -81,15 +81,15 @@ void setup() {
 
 uint8_t joystick1_x;
 uint8_t joystick1_y;
-uint8_t Button1;
+uint8_t button1;
 
 uint8_t joystick2_x;
 uint8_t joystick2_y;
-uint8_t Button2;
+uint8_t button2;
 
 uint8_t joystick3_x;
 uint8_t joystick3_y;
-uint8_t Button3;
+uint8_t button3;
 
 uint8_t robotic_arm_position;
 uint8_t mode_select;
@@ -101,27 +101,116 @@ const uint8_t joystick_idle_max = 144; // Maximum idle value
 
 uint8_t payload[13];
 
+#define BUFFER_SIZE 5
+
+uint8_t joystick1_x_buffer[BUFFER_SIZE] = {0};
+uint8_t joystick1_y_buffer[BUFFER_SIZE] = {0};
+uint8_t button1_buffer[BUFFER_SIZE] = {1};
+
+uint8_t joystick2_x_buffer[BUFFER_SIZE] = {0};
+uint8_t joystick2_y_buffer[BUFFER_SIZE] = {0};
+uint8_t button2_buffer[BUFFER_SIZE] = {1};
+
+uint8_t joystick3_x_buffer[BUFFER_SIZE] = {0};
+uint8_t joystick3_y_buffer[BUFFER_SIZE] = {0};
+uint8_t button3_buffer[BUFFER_SIZE] = {1};
+
+uint8_t robotic_arm_position_buffer[BUFFER_SIZE] = {0};
+uint8_t mode_select_buffer[BUFFER_SIZE] = {0};
+uint8_t mode_select_2_buffer[BUFFER_SIZE] = {0};
+uint8_t mode_select_3_buffer[BUFFER_SIZE] = {0};
+
+int buffer_index = 0;
+
+uint8_t joystick_movingAverage(uint8_t *buffer, uint8_t new_value) {
+  buffer[buffer_index] = new_value;
+
+  int sum = 0;
+  for (int i = 0; i < BUFFER_SIZE; i++) {
+    sum += buffer[i];
+    // Serial.print(buffer[i]);
+    // Serial.print(" ");
+  }
+  // Serial.print(" = ");
+  // Serial.print(sum);
+  // Serial.println();
+
+  return sum / BUFFER_SIZE; 
+}
+
+uint8_t button_movingAverage(uint8_t *buffer, uint8_t new_value) {
+  buffer[buffer_index] = new_value;
+
+  float sum = 0;
+  for (int i = 0; i < BUFFER_SIZE; i++) {
+    sum += buffer[i];
+    sum += buffer[i];
+    // Serial.print(buffer[i]);
+    // Serial.print(" ");
+  }
+
+  // Serial.print(" = ");
+  // Serial.print(sum);
+  // Serial.println();
+
+  sum / BUFFER_SIZE; 
+  uint8_t button_state = (sum >= 0.5) ? 1 : 0;
+  return button_state;
+}
+
 void loop() {
+
+  //buffer index cycle
+  buffer_index++;
+  if (buffer_index >= BUFFER_SIZE) {
+    buffer_index = 0;
+  }
 
   // Joystick 1
   joystick1_x = analogRead(joy1_x) >> 4;
   joystick1_y = analogRead(joy1_y) >> 4;
-  Button1 = digitalRead(but1);
+  button1 = digitalRead(but1);
 
   // Joystick 2
   joystick2_x = analogRead(joy2_x) >> 4;
   joystick2_y = analogRead(joy2_y) >> 4;
-  Button2 = digitalRead(but2);
+  button2 = digitalRead(but2);
 
   //joystick 3
   joystick3_x = analogRead(joy3_x) >> 4;
   joystick3_y = analogRead(joy3_y) >> 4;
-  Button3 = digitalRead(but3);
+  button3 = digitalRead(but3);
 
   robotic_arm_position = analogRead(ra_pos) >> 4;
   mode_select = digitalRead(mde_slct);
   mode_select_2 = digitalRead(mde_slct_2);
   mode_select_3 = digitalRead(mde_slct_3);
+
+  //applying average
+
+  // Joystick 1
+  //Serial.println("j1 avg");
+  joystick1_x = joystick_movingAverage(joystick1_x_buffer, joystick1_x);
+  joystick1_y = joystick_movingAverage(joystick1_y_buffer, joystick1_y);
+  button1 = button_movingAverage(button1_buffer, button1);
+
+  //Serial.println("j2 avg");
+  // Joystick 2
+  joystick2_x = joystick_movingAverage(joystick2_x_buffer, joystick2_x);
+  joystick2_y = joystick_movingAverage(joystick2_y_buffer, joystick2_y);
+  button2 = button_movingAverage(button2_buffer, button2);
+
+  //Serial.println("j3 avg");
+  //joystick 3
+  joystick3_x = joystick_movingAverage(joystick3_x_buffer, joystick3_x);
+  joystick3_y = joystick_movingAverage(joystick3_y_buffer, joystick3_y);
+  button3 = button_movingAverage(button3_buffer, button3);
+
+  //Serial.println("others avg");
+  //robotic_arm_position = joystick_movingAverage(robotic_arm_position_buffer, robotic_arm_position);
+  mode_select = button_movingAverage(mode_select_buffer, mode_select);
+  mode_select_2 = button_movingAverage(mode_select_buffer, mode_select_2);
+  mode_select_3 = button_movingAverage(mode_select_buffer, mode_select_3);
 
   printValues();
 
@@ -135,7 +224,7 @@ void loop() {
       (joystick3_y >= joystick_idle_min && joystick3_y <= joystick_idle_max);
 
   bool buttons_and_slides_untouched =
-      (Button1 == 1) && (Button2 == 1) && (Button3 == 1) &&
+      (button1 == 1) && (button2 == 1) && (button3 == 1) &&
       (robotic_arm_position == 0) && (mode_select == 0) && (mode_select_2 == 0) && (mode_select_3 == 0);
 
   // Only send data if there's a change
@@ -161,15 +250,15 @@ void loop() {
 void assignToPayload(uint8_t payload[13]) {
   payload[0] = joystick1_x;
   payload[1] = joystick1_y;
-  payload[2] = Button1;
+  payload[2] = button1;
 
   payload[3] = joystick2_x;
   payload[4] = joystick2_y;
-  payload[5] = Button2;
+  payload[5] = button2;
 
   payload[6] = joystick3_x;
   payload[7] = joystick3_y;
-  payload[8] = Button3;
+  payload[8] = button3;
 
   payload[9] = robotic_arm_position;
   payload[10] = mode_select;
@@ -178,9 +267,9 @@ void assignToPayload(uint8_t payload[13]) {
 }
 
 void printValues() {
-  Serial.print(joystick1_x); Serial.print(","); Serial.print(joystick1_y); Serial.print(","); Serial.print(Button1); Serial.println("  ");
-  Serial.print(joystick2_x); Serial.print(","); Serial.print(joystick2_y); Serial.print(","); Serial.print(Button2); Serial.println("  ");
-  Serial.print(joystick3_x); Serial.print(","); Serial.print(joystick3_y); Serial.print(","); Serial.print(Button3); Serial.println("  ");
+  Serial.print(joystick1_x); Serial.print(","); Serial.print(joystick1_y); Serial.print(","); Serial.print(button1); Serial.println("  ");
+  Serial.print(joystick2_x); Serial.print(","); Serial.print(joystick2_y); Serial.print(","); Serial.print(button2); Serial.println("  ");
+  Serial.print(joystick3_x); Serial.print(","); Serial.print(joystick3_y); Serial.print(","); Serial.print(button3); Serial.println("  ");
   Serial.print(robotic_arm_position); Serial.print(","); Serial.print(mode_select); Serial.print(","); Serial.print(mode_select_2); Serial.print(","); Serial.print(mode_select_3); Serial.println("  "); 
 
   Serial.println("  ");
