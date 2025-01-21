@@ -36,6 +36,8 @@ int fast = 255;
 int slow = 128;
 int speed = 0;
 
+int robotic_arm_position_timer = 0;
+
 // Pin definitions for LoRa SX1278
 #define ss 22         // Slave Select (NSS)
 #define rst 21       // Reset
@@ -370,8 +372,6 @@ char getJoystickCommand(uint8_t a, char axis, char positive, char negative) {
   }
   return axis; // Neutral position
 }
-
-int robotic_arm_position_timer = 0;
 
 String encodeRoboticArm() {
     char horizontal1Command = getJoystickCommand(joystick1_x, 'x', 'f', 'r');

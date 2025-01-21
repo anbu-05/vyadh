@@ -1,6 +1,16 @@
 #define steppin 13
 #define dirpin 12
 
+/*
+Serial2 for arduino DUE:
+
+Form Factor	RX	TX	  RX1	TX1	  RX2	TX2	  RX3	TX3
+MKR	        D0	D1						
+UNO	        D0	D1						
+Nano	      D0	D1						
+Mega	      D0	D1	  D19	D18	  D17	D16	  D15	D14
+*/
+
 const int step = 1600;
 const int step1 = 104;
 const int step2 = 190;
