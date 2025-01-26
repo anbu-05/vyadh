@@ -33,7 +33,7 @@ uint8_t payload[13];
 
 
 int fast = 255;
-int slow = 135;
+int slow = 128;
 int speed = 0;
 
 int robotic_arm_position_timer = 0;
@@ -60,7 +60,7 @@ HardwareSerial uart(1);
 void setup() {
   Serial.begin(115200);
   Serial.println("1");
-  uart.begin(921600, SERIAL_8N1, RXD2, TXD2);
+  uart.begin(115200, SERIAL_8N1, RXD2, TXD2);
   Serial.println("2"); 
 
   Serial.println("LoRa Receiver Setup");
@@ -89,7 +89,7 @@ void loop() {
 
   assignFromLoRa();
   assignFromPayload(payload);
-  //printValues();
+  printValues();
 
 //mode select
   if (mode_select == 1) {
@@ -131,9 +131,9 @@ void loop() {
     }
   }
 //
-  //Serial.println("traversal toggle: " + String(traversal_toggle));
-  //Serial.println("robotic arm toggle: " + String(robarm_toggle));
-  //Serial.println("science toggle: " + String(science_toggle));
+  Serial.println("traversal toggle: " + String(traversal_toggle));
+  Serial.println("robotic arm toggle: " + String(robarm_toggle));
+  Serial.println("science toggle: " + String(science_toggle));
 
 //traversal
   if (traversal_toggle) {
@@ -197,20 +197,25 @@ void loop() {
 //robotic arm
   if(robarm_toggle) {
     Serial.println("sending robotic arm");
-    char prnt = encodeRoboticArm();
-    uart.write(prnt);
-    Serial.println(String(prnt));
+    String prnt = encodeRoboticArm();
+    uart.println(prnt);
+    Serial.println(prnt);
   }
 
 //science kit
   if(science_toggle) {
     Serial.println("sending science kit");
-    char prnt = encodeScienceKit();
-    uart.write(prnt);
-    Serial.println(String(prnt));
+    String prnt = encodeScienceKit();
+    uart.println(prnt);
+    Serial.println(prnt);
   }
-
-  Serial.println(speed);
+  
+//feedback
+  LoRa.beginPacket();
+  LoRa.write(traversal_toggle);
+  LoRa.write(robarm_toggle);
+  LoRa.write(science_toggle);
+  LoRa.endPacket();
 }
 
 void assignFromPayload(uint8_t payload[13]) {
@@ -249,7 +254,7 @@ void assignFromLoRa() {
     // Print RSSI (signal strength)
     Serial.print("RSSI: ");
     Serial.println(LoRa.packetRssi());
-    //Serial.println(LoRa.packetFrequencyError());
+    Serial.println(LoRa.packetFrequencyError());
   }
 }
 
@@ -280,8 +285,6 @@ void resetPayload(uint8_t payload[13]) {
   payload[12] = 128;
 }
 
-int speed_increase = 15;
-int speed_delay = 15;
 
 void forward(int select_speed) { //add a speed argument when speed change is decided
   //speed = map(speed, 200, 255, 0, 255);
@@ -289,22 +292,17 @@ void forward(int select_speed) { //add a speed argument when speed change is dec
   digitalWrite(D2, LOW);
 
   if (select_speed == fast) {
-    for (speed; speed < fast; speed += speed_increase) {
+    for (speed; speed <= fast; speed += 10) {
       analogWrite(P1, speed);
       analogWrite(P2, speed);
-      Serial.println(speed);
-      delay(speed_delay);
     }
   }
 
   else if (select_speed == slow) {
-    //for (speed; speed < slow; speed += speed_increase) {
-      speed = slow;
-      analogWrite(P1, slow);
-      analogWrite(P2, slow);
-      Serial.println(speed);
-      //delay(speed_delay);
-    //}
+    for (speed; speed <= slow; speed += 10) {
+      analogWrite(P1, speed);
+      analogWrite(P2, speed);
+    }
   }
 }
 
@@ -314,20 +312,17 @@ void backward(int select_speed) { //add a speed argument when speed change is de
   digitalWrite(D2, HIGH);
 
   if (select_speed == fast) {
-    for (speed; speed < fast; speed += speed_increase) {
+    for (speed; speed <= fast; speed += 10) {
       analogWrite(P1, speed);
       analogWrite(P2, speed);
-      Serial.println(speed);
-      delay(speed_delay);
     }
   }
 
   else if (select_speed == slow) {
-    speed = slow;
-    analogWrite(P1, speed);
-    analogWrite(P2, speed);
-    Serial.println(speed);
-    delay(speed_delay);
+    for (speed; speed <= slow; speed += 10) {
+      analogWrite(P1, speed);
+      analogWrite(P2, speed);
+    }
   }
 }
 
@@ -338,20 +333,17 @@ void right(int select_speed) { //add a speed argument when speed change is decid
   digitalWrite(D2, HIGH);
 
   if (select_speed == fast) {
-    for (speed; speed < fast; speed += speed_increase) {
+    for (speed; speed <= fast; speed += 10) {
       analogWrite(P1, speed);
       analogWrite(P2, speed);
-      Serial.println(speed);
-      delay(speed_delay);
     }
   }
 
   else if (select_speed == slow) {
-    speed = slow;
-    analogWrite(P1, speed);
-    analogWrite(P2, speed);
-    Serial.println(speed);
-    delay(speed_delay);
+    for (speed; speed <= slow; speed += 10) {
+      analogWrite(P1, speed);
+      analogWrite(P2, speed);
+    }
   }
 }
 
@@ -362,21 +354,17 @@ void left(int select_speed) { //add a speed argument when speed change is decide
   digitalWrite(D2, LOW);
 
   if (select_speed == fast) {
-    for (speed; speed < fast; speed += speed_increase) {
+    for (speed; speed <= fast; speed += 10) {
       analogWrite(P1, speed);
       analogWrite(P2, speed);
-      Serial.println(speed);
-      delay(speed_delay);
     }
   }
 
-
   else if (select_speed == slow) {
-    speed = slow;
-    analogWrite(P1, speed);
-    analogWrite(P2, speed);
-    Serial.println(speed);
-    delay(speed_delay);
+    for (speed; speed <= slow; speed += 10) {
+      analogWrite(P1, speed);
+      analogWrite(P2, speed);
+    }
   }
 }
 
@@ -386,16 +374,10 @@ void stop() { //add a speed argument when speed change is decided
   digitalWrite(D1, HIGH);
   digitalWrite(D2, HIGH);
 
-  // for (speed; speed > 0; speed -= speed_increase) {
-  // Serial.println(speed);
-  // analogWrite(P1, speed);
-  // analogWrite(P2, speed);
-  // delay(2*speed_delay);
-  // }
-
-  analogWrite(P1, 0);
-  analogWrite(P2, 0);
-  speed = 0;
+  for (speed; speed >= 0; speed -= 10) {
+    analogWrite(P1, speed);
+    analogWrite(P2, speed);
+  }
 }
 
 
@@ -408,7 +390,7 @@ char getJoystickCommand(uint8_t a, char axis, char positive, char negative) {
   return axis; // Neutral position
 }
 
-char encodeRoboticArm() {
+String encodeRoboticArm() {
     char horizontal1Command = getJoystickCommand(joystick1_x, 'x', 'f', 'r');
     char horizontal2Command = getJoystickCommand(joystick2_x, 'x', 'y', 'h');
     char horizontal3Command = getJoystickCommand(joystick3_x, 'x', 'd', 'a');
@@ -418,33 +400,33 @@ char encodeRoboticArm() {
     char vertical3Command = getJoystickCommand(joystick3_y, 'x', 'w', 's');
 
     if (robotic_arm_position >= 160 && robotic_arm_position <= 180) {
-      return '1';
+      return "1";
     }
 
     else if (robotic_arm_position >= 110 && robotic_arm_position <= 130) {
-      return '2';
+      return "2";
     }
 
     else if (robotic_arm_position >= 25 && robotic_arm_position <= 40) {
-      return '3';
+      return "3";
     }
 
     else if (Button3 == 0) {
-      return 'i';
+      return "i";
     }
 
     else if (Button2 == 0) {
-      return 'k';
+      return "k";
     }
 
     else {
       switch (vertical1Command) {
         case 't':
-          return 't';
+          return "t";
           break;
 
         case 'g':
-          return 'g';
+          return "g";
           break;
 
         case 'x':
@@ -453,11 +435,11 @@ char encodeRoboticArm() {
 
       switch (horizontal1Command) {
         case 'r':
-          return 'r';
+          return "r";
           break;
 
         case 'f':
-          return 'f';
+          return "f";
           break;
 
         case 'x':
@@ -466,11 +448,11 @@ char encodeRoboticArm() {
 
       switch (horizontal2Command) {
         case 'y':
-          return 'y';
+          return "y";
           break;
 
         case 'h':
-          return 'h';
+          return "h";
           break;
 
         case 'x':
@@ -479,11 +461,11 @@ char encodeRoboticArm() {
 
       switch (vertical2Command) {
         case 'u':
-          return 'u';
+          return "u";
           break;
 
         case 'j':
-          return 'j';
+          return "j";
           break;
 
         case 'x':
@@ -492,11 +474,11 @@ char encodeRoboticArm() {
 
       switch (vertical3Command) {
         case 'w':
-          return 'w';
+          return "w";
           break;
 
         case 's':
-          return 's';
+          return "s";
           break;
 
         case 'x':
@@ -505,11 +487,11 @@ char encodeRoboticArm() {
 
     switch (horizontal3Command) {
       case 'a':
-        return 'a';
+        return "a";
         break;
 
       case 'd':
-        return 'd';
+        return "d";
         break;
 
       case 'x':
@@ -518,17 +500,17 @@ char encodeRoboticArm() {
   }
 
   robotic_arm_position_timer = 0;
-  return 'x';
+  return "x";
 }
 
-char encodeScienceKit() {
+String encodeScienceKit() {
   if (Button1 == 0) {
-      return 'p';
+      return "p";
     }
 
   else if (Button2 == 0) {
-    return 'l';
+    return "l";
   }
   
-  return 'x';
+  return "x";
 }

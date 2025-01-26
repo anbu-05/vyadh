@@ -38,7 +38,7 @@ char inputChar = 'x';
 void setup() {
   // STEP MOTOR SETUP **************************************************************************************
   Serial.begin(9600);
-  Serial2.begin(115200);
+  Serial2.begin(921600, SERIAL_8N1);
   pinMode(steppin, OUTPUT);
   pinMode(dirpin, OUTPUT);
 

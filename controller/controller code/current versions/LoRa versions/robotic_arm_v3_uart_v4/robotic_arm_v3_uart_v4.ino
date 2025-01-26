@@ -3,7 +3,6 @@
 // (encoded IG32) (Just IG32)
 // pwmw1, dirw1 for encoded IG
 
-
 #define RXD2 0
 #define TXD2 2
 
@@ -13,20 +12,6 @@ char recievedChar = 'x';
 char inputChar = 'x';
 
 //Linear actuators
-//temporary pins
-// #define pot1 34
-// #define p1 27
-// #define dir1 14
-
-// #define pot2 35
-// #define p2 25
-// #define dir2 26
-
-// #define pot3 4
-// #define p3 32
-// #define dir3 33
-
-// og pins
 #define pot1 34
 #define dir1 14
 #define p1 27
@@ -43,13 +28,6 @@ char inputChar = 'x';
 #define encA 36  
 #define encB 39  
 
-// temporary pins 
-// #define pwmw1 23  
-// #define dirw1 22  
-// #define pwmw2 17
-// #define dirw2 16
-
-// og pins
 #define pwmw1 32   
 #define dirw1 33  
 #define pwmw2 25
@@ -59,6 +37,7 @@ char inputChar = 'x';
 #define pwmtt 19 
 #define dirtt 18 
 int pwm_tt = 0;
+bool dirFlag;
 
 // gripper
 #define pwmg 21
@@ -116,10 +95,14 @@ void killMotors() {
   ledcWrite(p1, 0);
   ledcWrite(p2, 0);  
   ledcWrite(p3, 0);
-  // for(pwm_tt; pwm_tt > 0; pwm_tt = pwm_tt - 5){
-    ledcWrite(pwmtt, 0);
-    // delay(60);
-  // }
+  if(pwm_tt !=0){
+    for(pwm_tt; pwm_tt > 10; pwm_tt = pwm_tt - 5){
+      ledcWrite(pwmtt, pwm_tt);
+      delay(40);
+    }
+    pwm_tt = 0;
+  }
+  ledcWrite(pwmtt, pwm_tt);
   ledcWrite(pwmtt, 0);
   ledcWrite(pwmw1, 0); 
   ledcWrite(pwmw2, 0);  
@@ -313,75 +296,85 @@ void loop() {
       inputChar = recievedChar;
       previous_recievedChar = recievedChar;
     }
-  Serial.println("###"+String(recievedChar));
-  Serial.println("####"+String(inputChar));
+  // Serial.println("###"+String(recievedChar));
+  // Serial.println("####"+String(inputChar));
   }
   switch (inputChar) {
-    case '1':
-      killMotors();
-      homing1();
-      b1 = predefinedAngles[0][0];
-      b2 = predefinedAngles[0][1];
-      b3 = predefinedAngles[0][2];
-      b4 = predefinedAngles[0][3]*ppr/360;
-      moveJoints(b1, b2, b3, b4);
-      inputChar = 'x';
-      break;
+    // case '1':
+    //   killMotors();
+    //   homing1();
+    //   b1 = predefinedAngles[0][0];
+    //   b2 = predefinedAngles[0][1];
+    //   b3 = predefinedAngles[0][2];
+    //   b4 = predefinedAngles[0][3]*ppr/360;
+    //   moveJoints(b1, b2, b3, b4);
+    //   inputChar = 'x';
+    //   break;
 
-    case '2':
-      killMotors();
-      homing1();
-      b1 = predefinedAngles[1][0];
-      b2 = predefinedAngles[1][1];
-      b3 = predefinedAngles[1][2];
-      b4 = predefinedAngles[1][3]*ppr/360;
-      moveJoints(b1, b2, b3, b4);
-      inputChar = 'x';
-      break;
+    // case '2':
+    //   killMotors();
+    //   homing1();
+    //   b1 = predefinedAngles[1][0];
+    //   b2 = predefinedAngles[1][1];
+    //   b3 = predefinedAngles[1][2];
+    //   b4 = predefinedAngles[1][3]*ppr/360;
+    //   moveJoints(b1, b2, b3, b4);
+    //   inputChar = 'x';
+    //   break;
 
-    case '3':
-      killMotors(); 
-      homing1();
-      b1 = predefinedAngles[2][0];
-      b2 = predefinedAngles[2][1];
-      b3 = predefinedAngles[2][2];
-      b4 = predefinedAngles[2][3]*ppr/360;
-      moveJoints(b1, b2, b3, b4);
-      inputChar = 'x';
-      break;
+    // case '3':
+    //   killMotors(); 
+    //   homing1();
+    //   b1 = predefinedAngles[2][0];
+    //   b2 = predefinedAngles[2][1];
+    //   b3 = predefinedAngles[2][2];
+    //   b4 = predefinedAngles[2][3]*ppr/360;
+    //   moveJoints(b1, b2, b3, b4);
+    //   inputChar = 'x';
+    //   break;
       
     case 'r':
-      // for(pwm_tt; pwm_tt > 0; pwm_tt = pwm_tt - 5){
-      //   ledcWrite(pwmtt, pwm_tt);
-      //   Serial.println(pwm_tt);
-      //   delay(40);
-      // }
+      if (!dirFlag){
+        for(pwm_tt; pwm_tt > 0; pwm_tt = pwm_tt - 5){
+          ledcWrite(pwmtt, pwm_tt);
+          Serial.println(pwm_tt);
+          delay(40);
+        }
+        pwm_tt = 0;
+        ledcWrite(pwmtt, pwm_tt);
+      }
       digitalWrite(dirtt, HIGH);
       for(pwm_tt; pwm_tt < 80; pwm_tt = pwm_tt + 5){
         ledcWrite(pwmtt, pwm_tt);
         Serial.println(pwm_tt);
-        delay(60);
+        delay(40);
       }
       Serial.println("r");
       ledcWrite(pwmtt, pwm_tt);
       Serial.println(pwm_tt);
+      dirFlag = true;
       break;
 
     case 'f':
-      // for(pwm_tt; pwm_tt > 0; pwm_tt = pwm_tt - 5){
-      //   ledcWrite(pwmtt, pwm_tt);
-      //   Serial.println(pwm_tt);
-      //   delay(40);
-      // } 
+      if (dirFlag){
+        for(pwm_tt; pwm_tt > 0; pwm_tt = pwm_tt - 5){
+          ledcWrite(pwmtt, pwm_tt);
+          Serial.println(pwm_tt);
+          delay(40);
+        }
+        pwm_tt = 0;
+        ledcWrite(pwmtt, pwm_tt);
+      }
       digitalWrite(dirtt, LOW);
       for(pwm_tt; pwm_tt < 80; pwm_tt = pwm_tt + 5){
         ledcWrite(pwmtt, pwm_tt);
         Serial.println(pwm_tt);
-        delay(60);
+        delay(40);
       }
       Serial.println("f");
       ledcWrite(pwmtt, pwm_tt);
       Serial.println(pwm_tt);
+      dirFlag = false;
       break;
 
     case 't':
