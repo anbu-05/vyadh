@@ -34,6 +34,7 @@ uint8_t payload[13];
 
 int fast = 255;
 int slow = 135;
+int super_slow = 64;
 int speed = 0;
 
 int robotic_arm_position_timer = 0;
@@ -188,6 +189,32 @@ void loop() {
       forward(slow);
     }
 
+  //super slow control
+
+    else if (joystick3_x <= 5) {
+      Serial.println("super_slow");
+      Serial.println("left");
+      left(super_slow);
+    }
+
+    else if (joystick3_x >= 250) {
+      Serial.println("super_slow");
+      Serial.println("right");
+      right(super_slow);
+    }
+    
+    else if (joystick3_y >= 250) {
+      Serial.println("super_slow");
+      Serial.println("backward");
+      backward(super_slow);
+    }
+
+    else if (joystick3_y <= 5) {
+      Serial.println("super_slow");
+      Serial.println("forward");
+      forward(super_slow);
+    }
+
     else {
       Serial.println("stopped");
       stop();
@@ -209,7 +236,6 @@ void loop() {
     uart.write(prnt);
     Serial.println(String(prnt));
   }
-
   Serial.println(speed);
 }
 
@@ -298,13 +324,17 @@ void forward(int select_speed) { //add a speed argument when speed change is dec
   }
 
   else if (select_speed == slow) {
-    //for (speed; speed < slow; speed += speed_increase) {
       speed = slow;
       analogWrite(P1, slow);
       analogWrite(P2, slow);
       Serial.println(speed);
-      //delay(speed_delay);
-    //}
+  }
+
+  else if (select_speed == super_slow) {
+      speed = super_slow;
+      analogWrite(P1, super_slow);
+      analogWrite(P2, super_slow);
+      Serial.println(speed);
   }
 }
 
@@ -324,16 +354,22 @@ void backward(int select_speed) { //add a speed argument when speed change is de
 
   else if (select_speed == slow) {
     speed = slow;
-    analogWrite(P1, speed);
-    analogWrite(P2, speed);
+    analogWrite(P1, slow);
+    analogWrite(P2, slow);
     Serial.println(speed);
     delay(speed_delay);
+  }
+
+  else if (select_speed == super_slow) {
+      speed = super_slow;
+      analogWrite(P1, super_slow);
+      analogWrite(P2, super_slow);
+      Serial.println(speed);
   }
 }
 
 
 void right(int select_speed) { //add a speed argument when speed change is decided
-  //speed = map(speed, 200, 255, 0, 255);
   digitalWrite(D1, HIGH);
   digitalWrite(D2, HIGH);
 
@@ -351,7 +387,13 @@ void right(int select_speed) { //add a speed argument when speed change is decid
     analogWrite(P1, speed);
     analogWrite(P2, speed);
     Serial.println(speed);
-    delay(speed_delay);
+  }
+
+  else if (select_speed == super_slow) {
+      speed = super_slow;
+      analogWrite(P1, super_slow);
+      analogWrite(P2, super_slow);
+      Serial.println(speed);
   }
 }
 
@@ -373,10 +415,16 @@ void left(int select_speed) { //add a speed argument when speed change is decide
 
   else if (select_speed == slow) {
     speed = slow;
-    analogWrite(P1, speed);
-    analogWrite(P2, speed);
+    analogWrite(P1, slow);
+    analogWrite(P2, slow);
     Serial.println(speed);
-    delay(speed_delay);
+  }
+
+  else if (select_speed == super_slow) {
+      speed = super_slow;
+      analogWrite(P1, super_slow);
+      analogWrite(P2, super_slow);
+      Serial.println(speed);
   }
 }
 

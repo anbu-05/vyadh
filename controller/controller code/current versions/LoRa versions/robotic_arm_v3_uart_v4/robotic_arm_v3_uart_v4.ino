@@ -95,14 +95,14 @@ void killMotors() {
   ledcWrite(p1, 0);
   ledcWrite(p2, 0);  
   ledcWrite(p3, 0);
-  if(pwm_tt !=0){
-    for(pwm_tt; pwm_tt > 10; pwm_tt = pwm_tt - 5){
-      ledcWrite(pwmtt, pwm_tt);
-      delay(40);
-    }
-    pwm_tt = 0;
-  }
-  ledcWrite(pwmtt, pwm_tt);
+  // if(pwm_tt !=0){
+  //   for(pwm_tt; pwm_tt > 10; pwm_tt = pwm_tt - 5){
+  //     ledcWrite(pwmtt, pwm_tt);
+  //     delay(40);
+  //   }
+  //   pwm_tt = 0;
+  // }
+  ledcWrite(pwmtt, 0);
   ledcWrite(pwmtt, 0);
   ledcWrite(pwmw1, 0); 
   ledcWrite(pwmw2, 0);  
@@ -334,47 +334,49 @@ void loop() {
     //   break;
       
     case 'r':
-      if (!dirFlag){
-        for(pwm_tt; pwm_tt > 0; pwm_tt = pwm_tt - 5){
-          ledcWrite(pwmtt, pwm_tt);
-          Serial.println(pwm_tt);
-          delay(40);
-        }
-        pwm_tt = 0;
-        ledcWrite(pwmtt, pwm_tt);
-      }
+      // if (!dirFlag){
+      //   for(pwm_tt; pwm_tt > 0; pwm_tt = pwm_tt - 5){
+      //     ledcWrite(pwmtt, pwm_tt);
+      //     Serial.println(pwm_tt);
+      //     delay(10);
+      //   }
+      //   pwm_tt = 0;
+      //   ledcWrite(pwmtt, pwm_tt);
+      // }
       digitalWrite(dirtt, HIGH);
-      for(pwm_tt; pwm_tt < 80; pwm_tt = pwm_tt + 5){
-        ledcWrite(pwmtt, pwm_tt);
-        Serial.println(pwm_tt);
-        delay(40);
-      }
+      // for(pwm_tt; pwm_tt < 120; pwm_tt = pwm_tt + 5){
+      //   ledcWrite(pwmtt, pwm_tt);
+      //   Serial.println(pwm_tt);
+      //   delay(10);
+      // }
       Serial.println("r");
-      ledcWrite(pwmtt, pwm_tt);
-      Serial.println(pwm_tt);
-      dirFlag = true;
+      ledcWrite(pwmtt, 120);
+      // ledcWrite(pwmtt, pwm_tt);
+      // Serial.println(pwm_tt);
+      // dirFlag = true;
       break;
 
     case 'f':
-      if (dirFlag){
-        for(pwm_tt; pwm_tt > 0; pwm_tt = pwm_tt - 5){
-          ledcWrite(pwmtt, pwm_tt);
-          Serial.println(pwm_tt);
-          delay(40);
-        }
-        pwm_tt = 0;
-        ledcWrite(pwmtt, pwm_tt);
-      }
+      // if (dirFlag){
+      //   for(pwm_tt; pwm_tt > 0; pwm_tt = pwm_tt - 5){
+      //     ledcWrite(pwmtt, pwm_tt);
+      //     Serial.println(pwm_tt);
+      //     delay(10);
+      //   }
+      //   pwm_tt = 0;
+      //   ledcWrite(pwmtt, pwm_tt);
+      // }
       digitalWrite(dirtt, LOW);
-      for(pwm_tt; pwm_tt < 80; pwm_tt = pwm_tt + 5){
-        ledcWrite(pwmtt, pwm_tt);
-        Serial.println(pwm_tt);
-        delay(40);
-      }
+      // for(pwm_tt; pwm_tt < 120; pwm_tt = pwm_tt + 5){
+      //   ledcWrite(pwmtt, pwm_tt);
+      //   Serial.println(pwm_tt);
+      //   delay(10);
+      // }
       Serial.println("f");
-      ledcWrite(pwmtt, pwm_tt);
-      Serial.println(pwm_tt);
-      dirFlag = false;
+      ledcWrite(pwmtt, 120);
+      // ledcWrite(pwmtt, pwm_tt);
+      // Serial.println(pwm_tt);
+      // dirFlag = false;
       break;
 
     case 't':
@@ -426,8 +428,8 @@ void loop() {
       Serial.println("a");
       digitalWrite(dirw1, LOW);
       digitalWrite(dirw2, LOW);
-      ledcWrite(pwmw1, 2*pwm_ef);
-      ledcWrite(pwmw2, 2*pwm_ef);
+      ledcWrite(pwmw1, 3*pwm_ef);
+      ledcWrite(pwmw2, 3*pwm_ef);
       safety_homing();
       break;
 
@@ -444,8 +446,8 @@ void loop() {
       Serial.println("d"); 
       digitalWrite(dirw1, HIGH);
       digitalWrite(dirw2, HIGH);
-      ledcWrite(pwmw1, 2*pwm_ef);
-      ledcWrite(pwmw2, 2*pwm_ef);
+      ledcWrite(pwmw1, 3*pwm_ef);
+      ledcWrite(pwmw2, 3*pwm_ef);
       safety_homing();
       break;
 
