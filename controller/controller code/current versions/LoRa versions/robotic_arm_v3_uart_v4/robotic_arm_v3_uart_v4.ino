@@ -426,8 +426,8 @@ void loop() {
       Serial.println("a");
       digitalWrite(dirw1, LOW);
       digitalWrite(dirw2, LOW);
-      ledcWrite(pwmw1, pwm_ef);
-      ledcWrite(pwmw2, pwm_ef);
+      ledcWrite(pwmw1, 2*pwm_ef);
+      ledcWrite(pwmw2, 2*pwm_ef);
       safety_homing();
       break;
 
@@ -444,8 +444,8 @@ void loop() {
       Serial.println("d"); 
       digitalWrite(dirw1, HIGH);
       digitalWrite(dirw2, HIGH);
-      ledcWrite(pwmw1, pwm_ef);
-      ledcWrite(pwmw2, pwm_ef);
+      ledcWrite(pwmw1, 2*pwm_ef);
+      ledcWrite(pwmw2, 2*pwm_ef);
       safety_homing();
       break;
 
