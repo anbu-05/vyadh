@@ -97,7 +97,7 @@ uint8_t mode_select_2;
 uint8_t mode_select_3;
 
 const uint8_t joystick_idle_min = 96; // Minimum idle value
-const uint8_t joystick_idle_max = 148; // Maximum idle value
+const uint8_t joystick_idle_max = 160; // Maximum idle value
 
 unsigned long last_active_time = 0; // Tracks the last time activity was detected
 const unsigned long idle_timeout = 50; // Delay time in milliseconds

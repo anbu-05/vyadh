@@ -36,7 +36,7 @@ char inputChar = 'x';
 // turn table
 #define pwmtt 19 
 #define dirtt 18 
-int pwm_tt = 0;
+int pwm_tt = 90;
 bool dirFlag;
 
 // gripper
@@ -350,7 +350,7 @@ void loop() {
       //   delay(10);
       // }
       Serial.println("r");
-      ledcWrite(pwmtt, 120);
+      ledcWrite(pwmtt, 2*pwm_tt);
       // ledcWrite(pwmtt, pwm_tt);
       // Serial.println(pwm_tt);
       // dirFlag = true;
@@ -373,10 +373,22 @@ void loop() {
       //   delay(10);
       // }
       Serial.println("f");
-      ledcWrite(pwmtt, 120);
+      ledcWrite(pwmtt, 2*pwm_tt);
       // ledcWrite(pwmtt, pwm_tt);
       // Serial.println(pwm_tt);
       // dirFlag = false;
+      break;
+
+    case 'R':
+      digitalWrite(dirtt, HIGH);
+      Serial.println("R");
+      ledcWrite(pwmtt, pwm_tt);
+      break;
+    
+    case 'F':
+      digitalWrite(dirtt, LOW);
+      Serial.println("F");
+      ledcWrite(pwmtt, pwm_tt);
       break;
 
     case 't':

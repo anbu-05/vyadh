@@ -37,6 +37,7 @@ int slow = 135;
 int super_slow = 64;
 int speed = 0;
 
+
 //LoRa library by Sandeep Mistry
 
 // Pin definitions for LoRa SX1278
@@ -199,25 +200,25 @@ void loop() {
 
   //super slow control
 
-    else if (joystick3_x <= 5) {
+    else if (joystick3_x >= 250) {
       Serial.println("super_slow");
       Serial.println("left");
       left(super_slow);
     }
 
-    else if (joystick3_x >= 250) {
+    else if (joystick3_x <= 5) {
       Serial.println("super_slow");
       Serial.println("right");
       right(super_slow);
     }
     
-    else if (joystick3_y >= 250) {
+    else if (joystick3_y <= 5) {
       Serial.println("super_slow");
       Serial.println("backward");
       backward(super_slow);
     }
 
-    else if (joystick3_y <= 5) {
+    else if (joystick3_y >= 250) {
       Serial.println("super_slow");
       Serial.println("forward");
       forward(super_slow);
@@ -447,7 +448,12 @@ void stop() { //add a speed argument when speed change is decided
 }
 
 
-char getJoystickCommand(uint8_t a, char axis, char positive, char negative) {
+//note: joystick deadzone:
+const uint8_t joystick_idle_min = 100; // Minimum idle value
+const uint8_t joystick_idle_max = 156; // Maximum idle value
+
+
+char get_maxJoystickCommand(uint8_t a, char axis, char positive, char negative) {
   if (a >= 0 && a < 5) {
     return negative; // Left or down movement
   } else if (a > 250 && a <= 255) {
@@ -456,14 +462,26 @@ char getJoystickCommand(uint8_t a, char axis, char positive, char negative) {
   return axis; // Neutral position
 }
 
-char encodeRoboticArm() {
-    char horizontal1Command = getJoystickCommand(joystick1_x, 'x', 'f', 'r');
-    char horizontal2Command = getJoystickCommand(joystick2_x, 'x', 'y', 'h');
-    char horizontal3Command = getJoystickCommand(joystick3_x, 'x', 'd', 'a');
+char get_minJoystickCommand(uint8_t a, char axis, char positive, char negative) {
+  if (a >= 50 && a < 100) {
+    return negative; // Left or down movement
+  } else if (a > 156 && a <= 194) {
+    return positive; // Right or up movement
+  }
+  return axis; // Neutral position
+}
 
-    char vertical1Command = getJoystickCommand(joystick1_y, 'x', 't', 'g');
-    char vertical2Command = getJoystickCommand(joystick2_y, 'x', 'u', 'j');
-    char vertical3Command = getJoystickCommand(joystick3_y, 'x', 'w', 's');
+char encodeRoboticArm() {
+    char max_horizontal1Command = get_maxJoystickCommand(joystick1_x, 'x', 'f', 'r');
+    char max_horizontal2Command = get_maxJoystickCommand(joystick2_x, 'x', 'y', 'h');
+    char max_horizontal3Command = get_maxJoystickCommand(joystick3_x, 'x', 'd', 'a');
+
+    char min_horizontal1command = get_minJoystickCommand(joystick1_x, 'x', 'F', 'R');
+
+    char max_vertical1Command = get_maxJoystickCommand(joystick1_y, 'x', 't', 'g');
+    char max_vertical2Command = get_maxJoystickCommand(joystick2_y, 'x', 'u', 'j');
+    char max_vertical3Command = get_maxJoystickCommand(joystick3_y, 'x', 'w', 's');
+ 
 
     if (robotic_arm_position >= 160 && robotic_arm_position <= 180) {
       return '1';
@@ -486,7 +504,7 @@ char encodeRoboticArm() {
     }
 
     else {
-      switch (vertical1Command) {
+      switch (max_vertical1Command) {
         case 't':
           return 't';
           break;
@@ -499,7 +517,7 @@ char encodeRoboticArm() {
           break;
       }
 
-      switch (horizontal1Command) {
+      switch (max_horizontal1Command) {
         case 'r':
           return 'r';
           break;
@@ -512,7 +530,20 @@ char encodeRoboticArm() {
           break;
       }
 
-      switch (horizontal2Command) {
+      switch (min_horizontal1command) {
+        case 'R':
+          return 'R';
+          break;
+
+        case 'F':
+          return 'F';
+          break;
+
+        case 'x':
+          break;
+      }
+
+      switch (max_horizontal2Command) {
         case 'y':
           return 'y';
           break;
@@ -525,7 +556,7 @@ char encodeRoboticArm() {
           break;
       }
 
-      switch (vertical2Command) {
+      switch (max_vertical2Command) {
         case 'u':
           return 'u';
           break;
@@ -538,7 +569,7 @@ char encodeRoboticArm() {
           break;
       }
 
-      switch (vertical3Command) {
+      switch (max_vertical3Command) {
         case 'w':
           return 'w';
           break;
@@ -551,7 +582,7 @@ char encodeRoboticArm() {
           break;
       }
 
-    switch (horizontal3Command) {
+    switch (max_horizontal3Command) {
       case 'a':
         return 'a';
         break;

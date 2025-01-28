@@ -37,6 +37,7 @@ void setup() {
 }
 
 void loop() {
+  Serial.println("--");
   // Check for serial input *********************************************************************************
   if (Serial.available() > 0) {
     String command = Serial.readStringUntil('\n');
