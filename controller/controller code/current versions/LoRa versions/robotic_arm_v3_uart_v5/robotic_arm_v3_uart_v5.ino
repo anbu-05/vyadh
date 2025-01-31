@@ -91,6 +91,25 @@ void readEncoder() {
   posi = posi + 1;
 }
 
+void homing() {
+  lmt1 = analogRead(limit1);
+  while(lmt1 < 4000){
+    ledcWrite(pwmw1, pwm_homing);
+    digitalWrite(dirw1, LOW);
+    ledcWrite(pwmw2, pwm_homing);
+    digitalWrite(dirw2, HIGH);
+    lmt1 = analogRead(limit1);
+  }
+  digitalWrite(dirw1, HIGH);
+  ledcWrite(pwmw1, pwm_homing);
+  digitalWrite(dirw2, LOW);
+  ledcWrite(pwmw2, pwm_homing);
+  delay(500);
+  ledcWrite(pwmw1,0);
+  ledcWrite(pwmw2,0);
+  posi = 0;
+}
+
 void killMotors() {
   ledcWrite(p1, 0);
   ledcWrite(p2, 0);  
@@ -103,42 +122,9 @@ void killMotors() {
   //   pwm_tt = 0;
   // }
   ledcWrite(pwmtt, 0);
-  ledcWrite(pwmtt, 0);
   ledcWrite(pwmw1, 0); 
   ledcWrite(pwmw2, 0);  
   ledcWrite(pwmg, 0);
-  // delay(20);
-}
-
-void homing1() {
-  lmt1 = analogRead(limit1);
-  while(lmt1 < 4000){
-    ledcWrite(pwmw1, pwm_homing);
-    digitalWrite(dirw1, LOW);
-    ledcWrite(pwmw2, pwm_homing);
-    digitalWrite(dirw2, HIGH);
-    lmt1 = analogRead(limit1);
-  }
-  posi = 0;
-  ledcWrite(pwmw1,0); 
-  ledcWrite(pwmw2,0); 
-  digitalWrite(dirw1, HIGH);
-  ledcWrite(pwmw1, pwm_homing);
-  digitalWrite(dirw2, LOW);
-  ledcWrite(pwmw2, pwm_homing);
-  delay(500);
-  ledcWrite(pwmw1,0);
-  ledcWrite(pwmw2,0);
-  posi = 0;
-}
-
-void homing2() { 
-  digitalWrite(dirw1, LOW);
-  ledcWrite(pwmw1, pwm_homing);
-  digitalWrite(dirw2, HIGH);
-  ledcWrite(pwmw2, pwm_homing);
-  delay(50);
-  homing1();
 }
 
 void safety_homing() {
@@ -150,6 +136,7 @@ void safety_homing() {
     ledcWrite(pwmw1, 100);
     digitalWrite(dirw2, LOW);
     ledcWrite(pwmw2, 100);
+    delay(20);
     inputChar = 'x';
     killMotors();
   }
@@ -159,6 +146,7 @@ void safety_homing() {
     ledcWrite(pwmw1, 100);
     digitalWrite(dirw2,HIGH);
     ledcWrite(pwmw2, 100);
+    delay(20);
     inputChar = 'x';
     killMotors();
   }
@@ -179,13 +167,15 @@ void moveJoints(float b1, float b2, float b3, float b4) {
     lmt1 = analogRead(limit1);
     lmt2 = analogRead(limit2);
     if(lmt1 > 4000){
-      homing1();
+      homing();
       break;
     }
     if(lmt2 >4000){
-      homing2();
+      homing();
       break;
     }
+    // Serial.println("target pulse: "+(String)a);
+    // Serial.println("posi: "+(String)posi);
   }
   ledcWrite(pwmw1, 0);
   ledcWrite(pwmw2, 0);

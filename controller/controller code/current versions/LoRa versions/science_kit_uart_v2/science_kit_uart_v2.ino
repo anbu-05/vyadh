@@ -17,8 +17,8 @@ const int step2 = 190;
 int i = 0;
 int speed = 5; // Placeholder speed value
 
-String previous_recievedString = "";
-String recievedString = "";
+char previous_recievedString = 'x';
+char recievedString = 'x';
 char inputChar = 'x';
 
 // PUMP MOTOR PINS
@@ -38,7 +38,7 @@ char inputChar = 'x';
 void setup() {
   // STEP MOTOR SETUP **************************************************************************************
   Serial.begin(9600);
-  Serial2.begin(115200, SERIAL_8N1);
+  Serial2.begin(115200);
   pinMode(steppin, OUTPUT);
   pinMode(dirpin, OUTPUT);
 
@@ -54,7 +54,7 @@ void setup() {
 void loop() {
   // Check for serial input *********************************************************************************
   if (Serial2.available()) {
-    recievedString =  Serial2.readStringUntil('\n');
+    recievedString =  Serial2.read();
 
     if (recievedString != previous_recievedString) {
       Serial.println("change");
@@ -62,7 +62,7 @@ void loop() {
       
     }
     else {
-      inputChar = recievedString[0];
+      inputChar = recievedString;
     }
 
     Serial.print("inputChar: ");
