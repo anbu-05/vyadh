@@ -1,3 +1,0 @@
-version 1: very unstable due to esp now code
-version 2: stable with new esp now code
-version 3: adding a way to toggle between traversal and robotic arm
