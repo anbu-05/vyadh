@@ -1,0 +1,2 @@
+Removed Pin From Net: NetName=SPI2_DI00 Pin=ESP32 S3-5
+Added Pin To Net: NetName=SPI2_DI00 Pin=ESP32 S3-22

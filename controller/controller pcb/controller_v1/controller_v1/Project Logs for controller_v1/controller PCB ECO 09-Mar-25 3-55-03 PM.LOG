@@ -1,0 +1,34 @@
+Removed Pin From Net: NetName=SW1 Pin=R17-2
+Removed Pin From Net: NetName=SW2 Pin=R18-2
+Removed Pin From Net: NetName=SW3 Pin=R20-2
+Removed Pin From Net: NetName=SW4 Pin=R21-2
+Removed Pin From Net: NetName=SW5 Pin=R24-2
+Removed Pin From Net: NetName=SW1 Pin=SW1-B'
+Removed Pin From Net: NetName=SW2 Pin=SW2-B'
+Removed Pin From Net: NetName=SW3 Pin=SW3-B'
+Removed Pin From Net: NetName=SW4 Pin=SW4-B'
+Removed Pin From Net: NetName=SW5 Pin=SW5-B'
+Change Component Designator: OldDesignator= NewDesignator=R16
+Change Component Designator: OldDesignator= NewDesignator=R19
+Change Component Designator: OldDesignator= NewDesignator=R22
+Change Component Designator: OldDesignator= NewDesignator=R23
+Added Pin To Net: NetName=SW1 Pin=SW1-B
+Added Pin To Net: NetName=SW2 Pin=SW2-B
+Added Pin To Net: NetName=SW3 Pin=SW3-B
+Added Pin To Net: NetName=SW4 Pin=SW4-B
+Added Pin To Net: NetName=SW5 Pin=SW5-B
+Added Pin To Net: NetName=NetR17_2 Pin=R17-2
+Added Pin To Net: NetName=NetR17_2 Pin=SW1-B'
+Added Net: Name=NetR17_2
+Added Pin To Net: NetName=NetR18_2 Pin=R18-2
+Added Pin To Net: NetName=NetR18_2 Pin=SW2-B'
+Added Net: Name=NetR18_2
+Added Pin To Net: NetName=NetR20_2 Pin=R20-2
+Added Pin To Net: NetName=NetR20_2 Pin=SW3-B'
+Added Net: Name=NetR20_2
+Added Pin To Net: NetName=NetR21_2 Pin=R21-2
+Added Pin To Net: NetName=NetR21_2 Pin=SW4-B'
+Added Net: Name=NetR21_2
+Added Pin To Net: NetName=NetR24_2 Pin=R24-2
+Added Pin To Net: NetName=NetR24_2 Pin=SW5-B'
+Added Net: Name=NetR24_2

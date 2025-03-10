@@ -1,0 +1,43 @@
+Added Component: Designator=ESP32 S3(XCVR_ESP32-S3-WROOM-1U-N16R8)
+Add component (AddParameter): Name = "Availability"; Value = "Unavailable"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/ESP32-S3-WROOM-1U-N16R8/Espressif+Systems/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Espressif Systems"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "ESP32-S3-WROOM-1U-N16R8"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/ESP32-S3-WROOM-1U-N16R8/Espressif+Systems/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=ESP32 S3-1
+Added Pin To Net: NetName=3v3 Pin=ESP32 S3-2
+Added Pin To Net: NetName=NetC2_1 Pin=ESP32 S3-3
+Added Pin To Net: NetName=SPI2_DI00 Pin=ESP32 S3-5
+Added Pin To Net: NetName=SCL Pin=ESP32 S3-6
+Added Pin To Net: NetName=SDA Pin=ESP32 S3-7
+Added Pin To Net: NetName=LED1 Pin=ESP32 S3-8
+Added Pin To Net: NetName=LED2 Pin=ESP32 S3-9
+Added Pin To Net: NetName=LED3 Pin=ESP32 S3-10
+Added Pin To Net: NetName=LED4 Pin=ESP32 S3-11
+Added Pin To Net: NetName=D_- Pin=ESP32 S3-13
+Added Pin To Net: NetName=D_+ Pin=ESP32 S3-14
+Added Pin To Net: NetName=SPI2_SS Pin=ESP32 S3-17
+Added Pin To Net: NetName=SPI2_RST Pin=ESP32 S3-18
+Added Pin To Net: NetName=SPI2_MOSI Pin=ESP32 S3-19
+Added Pin To Net: NetName=SPI2_SCK Pin=ESP32 S3-20
+Added Pin To Net: NetName=SPI2_MISO Pin=ESP32 S3-21
+Added Pin To Net: NetName=SW1 Pin=ESP32 S3-23
+Added Pin To Net: NetName=SW2 Pin=ESP32 S3-28
+Added Pin To Net: NetName=SW3 Pin=ESP32 S3-29
+Added Pin To Net: NetName=SW4 Pin=ESP32 S3-30
+Added Pin To Net: NetName=SW5 Pin=ESP32 S3-31
+Added Pin To Net: NetName=T_SW1 Pin=ESP32 S3-32
+Added Pin To Net: NetName=T_SW2 Pin=ESP32 S3-33
+Added Pin To Net: NetName=GND Pin=ESP32 S3-40
+Added Pin To Net: NetName=GND Pin=ESP32 S3-41_1
+Added Pin To Net: NetName=GND Pin=ESP32 S3-41_2
+Added Pin To Net: NetName=GND Pin=ESP32 S3-41_3
+Added Pin To Net: NetName=GND Pin=ESP32 S3-41_4
+Added Pin To Net: NetName=GND Pin=ESP32 S3-41_5
+Added Pin To Net: NetName=GND Pin=ESP32 S3-41_6
+Added Pin To Net: NetName=GND Pin=ESP32 S3-41_7
+Added Pin To Net: NetName=GND Pin=ESP32 S3-41_8
+Added Pin To Net: NetName=GND Pin=ESP32 S3-41_9

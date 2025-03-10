@@ -1,0 +1,16 @@
+Removed Pin From Net: NetName=3v3 Pin=JOY1-a
+Removed Pin From Net: NetName=JOY1_SW Pin=JOY1-c
+Removed Pin From Net: NetName=3v3 Pin=JOY2-a
+Removed Pin From Net: NetName=JOY2_SW Pin=JOY2-c
+Removed Pin From Net: NetName=3v3 Pin=JOY3-a
+Removed Pin From Net: NetName=JOY3_SW Pin=JOY3-c
+Removed Pin From Net: NetName=3v3 Pin=JOY4-a
+Removed Pin From Net: NetName=JOY4_SW Pin=JOY4-c
+Added Pin To Net: NetName=3v3 Pin=JOY1-b
+Added Pin To Net: NetName=JOY1_SW Pin=JOY1-d
+Added Pin To Net: NetName=3v3 Pin=JOY2-b
+Added Pin To Net: NetName=JOY2_SW Pin=JOY2-d
+Added Pin To Net: NetName=3v3 Pin=JOY3-b
+Added Pin To Net: NetName=JOY3_SW Pin=JOY3-d
+Added Pin To Net: NetName=3v3 Pin=JOY4-b
+Added Pin To Net: NetName=JOY4_SW Pin=JOY4-d

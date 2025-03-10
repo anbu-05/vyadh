@@ -1,0 +1,9 @@
+Change Component Designator: OldDesignator= NewDesignator=C18
+Change Net Name : Old Net Name=JOY1_SW New Net Name=NetJOY1_d
+Change Net Name : Old Net Name=JOY2_SW New Net Name=NetJOY2_d
+Added Pin To Net: NetName=JOY1_SW Pin=ESP32 S3-4
+Added Pin To Net: NetName=JOY1_SW Pin=JOY1-c
+Added Net: Name=JOY1_SW
+Added Pin To Net: NetName=JOY2_SW Pin=ESP32 S3-5
+Added Pin To Net: NetName=JOY2_SW Pin=JOY2-c
+Added Net: Name=JOY2_SW

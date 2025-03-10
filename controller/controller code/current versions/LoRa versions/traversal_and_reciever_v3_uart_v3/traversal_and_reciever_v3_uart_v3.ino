@@ -308,7 +308,7 @@ void resetPayload(uint8_t payload[13]) {
 }
 
 int speed_increase = 15;
-int speed_delay = 15;
+int speed_delay = 7;
 
 void forward(int select_speed) { //add a speed argument when speed change is decided
   //speed = map(speed, 200, 255, 0, 255);
@@ -432,15 +432,12 @@ void left(int select_speed) { //add a speed argument when speed change is decide
 
 void stop() { //add a speed argument when speed change is decided
 
-  digitalWrite(D1, HIGH);
-  digitalWrite(D2, HIGH);
-
-  // for (speed; speed > 0; speed -= speed_increase) {
-  // Serial.println(speed);
-  // analogWrite(P1, speed);
-  // analogWrite(P2, speed);
-  // delay(2*speed_delay);
-  // }
+  for (speed; speed > 0; speed -= speed_increase) {
+  Serial.println(speed);
+  analogWrite(P1, speed);
+  analogWrite(P2, speed);
+  delay(speed_delay);
+  }
 
   analogWrite(P1, 0);
   analogWrite(P2, 0);

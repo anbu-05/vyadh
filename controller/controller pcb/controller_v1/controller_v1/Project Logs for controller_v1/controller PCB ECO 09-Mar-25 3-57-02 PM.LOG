@@ -1,0 +1,14 @@
+Removed Pin From Net: NetName=SW1 Pin=ESP32 S3-23
+Removed Pin From Net: NetName=SW2 Pin=ESP32 S3-28
+Removed Pin From Net: NetName=SW3 Pin=ESP32 S3-29
+Removed Pin From Net: NetName=SW4 Pin=ESP32 S3-30
+Removed Pin From Net: NetName=SW5 Pin=ESP32 S3-31
+Removed Pin From Net: NetName=T_SW1 Pin=ESP32 S3-32
+Removed Pin From Net: NetName=T_SW2 Pin=ESP32 S3-33
+Added Pin To Net: NetName=SW1 Pin=ESP32 S3-28
+Added Pin To Net: NetName=SW2 Pin=ESP32 S3-29
+Added Pin To Net: NetName=SW3 Pin=ESP32 S3-30
+Added Pin To Net: NetName=SW4 Pin=ESP32 S3-31
+Added Pin To Net: NetName=SW5 Pin=ESP32 S3-32
+Added Pin To Net: NetName=T_SW1 Pin=ESP32 S3-33
+Added Pin To Net: NetName=T_SW2 Pin=ESP32 S3-34

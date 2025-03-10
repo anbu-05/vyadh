@@ -97,16 +97,13 @@ uint8_t mode_select_2;
 uint8_t mode_select_3;
 
 const uint8_t joystick_idle_min = 100; // Minimum idle value
-const uint8_t joystick_idle_max = 144; // Maximum idle value
+const uint8_t joystick_idle_max = 156; // Maximum idle value
 
 unsigned long last_active_time = 0; // Tracks the last time activity was detected
-const unsigned long idle_timeout = 200; // Delay time in milliseconds
-
-int traversal_toggle = 1;
-int robarm_toggle = 0;
-int science_toggle = 0;
+const unsigned long idle_timeout = 500; // Delay time in milliseconds
 
 uint8_t payload[13];
+uint8_t feedbackPayload[3];
 
 void loop() {
 
@@ -130,7 +127,6 @@ void loop() {
   mode_select_2 = digitalRead(mde_slct_2);
   mode_select_3 = digitalRead(mde_slct_3);
 
-  printValues();
 
     // Check for significant changes
   bool joysticks_idle_now = 
@@ -152,6 +148,7 @@ void loop() {
 
   // Only send data if there's a change
   if (millis() - last_active_time < idle_timeout) {
+    printValues();
     // Assign updated values to payload
     assignToPayload(payload);
     // Send data via LoRa
@@ -163,28 +160,39 @@ void loop() {
     Serial.println("Updated values sent: ");
   }
 
-//feedback
-  feedback_assignFromLoRa();
+  assignFeedbackFromLoRa();
+
+  Serial.print("traversal mode: ");
+  Serial.println(feedbackPayload[2]);
+  Serial.print("robotic arm: ");
+  Serial.println(feedbackPayload[1]);
+  Serial.print("science kit: ");
+  Serial.println(feedbackPayload[0]);
+  Serial.println("  ");
+  Serial.println("  ");
+  Serial.println("  ");
+
 }
 
-void feedback_assignFromLoRa() {
+void assignFeedbackFromLoRa() {
   int packetSize = LoRa.parsePacket();
-  if (packetSize == 0) return;
+  if (packetSize) {
+    Serial.println("###Received packet###");
 
-  traversal_toggle = LoRa.read();
-  robarm_toggle = LoRa.read();
-  science_toggle = LoRa.read();
+    // Read packet contents 
+    int i = LoRa.available() - 1;
+    while (i) {
+      Serial.println(i);
+      feedbackPayload[i-1] = LoRa.read();
+      Serial.println(feedbackPayload[i-1]);
+      i--;
+    }
 
-  Serial.println("### feedback ###");
-  Serial.println("traversal toggle: " + String(traversal_toggle));
-  Serial.println("robotic arm toggle: " + String(robarm_toggle));
-  Serial.println("science toggle: " + String(science_toggle));
-
-
-  // Print RSSI (signal strength)
-  Serial.print("RSSI: ");
-  Serial.println(LoRa.packetRssi());
-  Serial.println(LoRa.packetFrequencyError());
+    // Print RSSI (signal strength)
+    Serial.print("RSSI: ");
+    Serial.println(LoRa.packetRssi());
+    //Serial.println(LoRa.packetFrequencyError());
+  }
 }
 
 void assignToPayload(uint8_t payload[13]) {

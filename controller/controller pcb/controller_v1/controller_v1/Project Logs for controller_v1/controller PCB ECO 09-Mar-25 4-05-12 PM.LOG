@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=JOY4_X Pin=ADC2-4
+Removed Pin From Net: NetName=JOY4_Y Pin=ADC2-5
+Removed Pin From Net: NetName=JOY4_X Pin=C12-1
+Removed Pin From Net: NetName=JOY4_Y Pin=C13-1
+Added Pin To Net: NetName=JOY4_Y Pin=ADC2-4
+Added Pin To Net: NetName=JOY4_X Pin=ADC2-5
+Added Pin To Net: NetName=JOY4_Y Pin=C12-1
+Added Pin To Net: NetName=JOY4_X Pin=C13-1

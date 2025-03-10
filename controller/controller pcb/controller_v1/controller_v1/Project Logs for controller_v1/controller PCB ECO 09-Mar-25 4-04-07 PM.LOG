@@ -1,0 +1,18 @@
+Removed Pin From Net: NetName=JOY3_X Pin=-1
+Removed Pin From Net: NetName=JOY3_Y Pin=-1
+Removed Pin From Net: NetName=JOY3_X Pin=ADC2-4
+Removed Pin From Net: NetName=JOY3_Y Pin=ADC2-5
+Removed Pin From Net: NetName=JOY4_X Pin=ADC2-6
+Removed Pin From Net: NetName=JOY4_Y Pin=ADC2-7
+Removed Pin From Net: NetName=JOY4_X Pin=C14-1
+Removed Pin From Net: NetName=JOY4_Y Pin=C15-1
+Change Component Designator: OldDesignator= NewDesignator=C12
+Change Component Designator: OldDesignator= NewDesignator=C13
+Added Pin To Net: NetName=JOY4_X Pin=ADC2-4
+Added Pin To Net: NetName=JOY4_Y Pin=ADC2-5
+Added Pin To Net: NetName=JOY3_Y Pin=ADC2-6
+Added Pin To Net: NetName=JOY3_X Pin=ADC2-7
+Added Pin To Net: NetName=JOY4_X Pin=C12-1
+Added Pin To Net: NetName=JOY4_Y Pin=C13-1
+Added Pin To Net: NetName=JOY3_Y Pin=C14-1
+Added Pin To Net: NetName=JOY3_X Pin=C15-1

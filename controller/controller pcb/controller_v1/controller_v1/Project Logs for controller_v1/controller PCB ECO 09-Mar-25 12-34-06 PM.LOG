@@ -1,0 +1,6 @@
+Removed Pin From Net: NetName=GND Pin=C8-1
+Change Component Designator: OldDesignator=0.1uF NewDesignator=C18
+Change Component Designator: OldDesignator=10k NewDesignator=R15
+Change Component Designator: OldDesignator=22uF NewDesignator=C17
+Added Pin To Net: NetName=3v3 Pin=R1-1
+Added Pin To Net: NetName=NetC2_1 Pin=RESET-3

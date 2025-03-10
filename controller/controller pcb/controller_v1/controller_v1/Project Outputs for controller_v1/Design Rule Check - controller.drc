@@ -1,0 +1,58 @@
+Protel Design System Design Rule Check
+PCB File : D:\Z\projects\vyadh\controller\controller pcb\controller_v1\controller_v1\controller.PcbDoc
+Date     : 09-Mar-25
+Time     : 10:11:26 PM
+
+Processing Rule : Clearance Constraint (Gap=0.2mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+Rule Violations :0
+
+Processing Rule : Un-Routed Net Constraint ( (All) )
+   Violation between Un-Routed Net Constraint: Net GND Between Pad ESP32 S3-41_7(56.155mm,47.14mm) on Top Layer And Pad ESP32 S3-41_8(57.555mm,47.14mm) on Top Layer 
+Rule Violations :1
+
+Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=0.254mm) (Max=1mm) (Preferred=0.254mm) (All)
+Rule Violations :0
+
+Processing Rule : Routing Topology Rule(Topology=Shortest) (All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=0.508mm) (Conductor Width=0.254mm) (Air Gap=0.254mm) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=0.025mm) (Max=2.54mm) (All)
+Rule Violations :0
+
+Processing Rule : Hole To Hole Clearance (Gap=0.254mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=0.16mm) (All),(All)
+   Violation between Minimum Solder Mask Sliver Constraint: (0.047mm < 0.16mm) Between Pad USB micro B-1(45.55mm,70.9mm) on Top Layer And Pad USB micro B-2(44.9mm,70.9mm) on Top Layer [Top Solder] Mask Sliver [0.047mm]
+   Violation between Minimum Solder Mask Sliver Constraint: (0.072mm < 0.16mm) Between Pad USB micro B-1(45.55mm,70.9mm) on Top Layer And Pad USB micro B-6(46.75mm,70.9mm) on Multi-Layer [Top Solder] Mask Sliver [0.072mm]
+   Violation between Minimum Solder Mask Sliver Constraint: (0.047mm < 0.16mm) Between Pad USB micro B-2(44.9mm,70.9mm) on Top Layer And Pad USB micro B-3(44.25mm,70.9mm) on Top Layer [Top Solder] Mask Sliver [0.047mm]
+   Violation between Minimum Solder Mask Sliver Constraint: (0.047mm < 0.16mm) Between Pad USB micro B-3(44.25mm,70.9mm) on Top Layer And Pad USB micro B-4(43.6mm,70.9mm) on Top Layer [Top Solder] Mask Sliver [0.047mm]
+   Violation between Minimum Solder Mask Sliver Constraint: (0.047mm < 0.16mm) Between Pad USB micro B-4(43.6mm,70.9mm) on Top Layer And Pad USB micro B-5(42.95mm,70.9mm) on Top Layer [Top Solder] Mask Sliver [0.047mm]
+   Violation between Minimum Solder Mask Sliver Constraint: (0.072mm < 0.16mm) Between Pad USB micro B-5(42.95mm,70.9mm) on Top Layer And Pad USB micro B-7(41.75mm,70.9mm) on Multi-Layer [Top Solder] Mask Sliver [0.072mm]
+Rule Violations :6
+
+Processing Rule : Silk To Solder Mask (Clearance=0.16mm) (IsPad),(All)
+Rule Violations :0
+
+Processing Rule : Silk to Silk (Clearance=0.254mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Net Antennae (Tolerance=0mm) (All)
+Rule Violations :0
+
+Processing Rule : Height Constraint (Min=0mm) (Max=25.4mm) (Prefered=12.7mm) (All)
+Rule Violations :0
+
+
+Violations Detected : 7
+Waived Violations : 0
+Time Elapsed        : 00:00:00

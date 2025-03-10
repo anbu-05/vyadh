@@ -1,0 +1,8 @@
+Change Net Name : Old Net Name=JOY3_SW New Net Name=NetJOY3_d
+Change Net Name : Old Net Name=JOY4_SW New Net Name=NetJOY4_d
+Added Pin To Net: NetName=JOY3_SW Pin=ESP32 S3-39
+Added Pin To Net: NetName=JOY3_SW Pin=JOY3-c
+Added Net: Name=JOY3_SW
+Added Pin To Net: NetName=JOY4_SW Pin=ESP32 S3-38
+Added Pin To Net: NetName=JOY4_SW Pin=JOY4-c
+Added Net: Name=JOY4_SW

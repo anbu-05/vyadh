@@ -1,3 +1,5 @@
+//incomplete
+
 #include <SPI.h>
 #include <LoRa.h>
 
@@ -30,7 +32,6 @@ uint8_t prev_mode_select_3 = 0;
 
 
 uint8_t payload[13];
-uint8_t feedbackPayload[3];
 
 
 int fast = 255;
@@ -90,7 +91,6 @@ void loop() {
 
   assignFromLoRa();
   assignFromPayload(payload);
-  sendFeedback(feedbackPayload);
   //printValues();
 
 //mode select
@@ -240,10 +240,7 @@ void loop() {
     Serial.println(String(prnt));
   }
   Serial.println(speed);
-//
-
 }
-
 
 void assignFromPayload(uint8_t payload[13]) {
   mode_select_3 = payload[0];
@@ -283,16 +280,6 @@ void assignFromLoRa() {
     Serial.println(LoRa.packetRssi());
     //Serial.println(LoRa.packetFrequencyError());
   }
-}
-
-void sendFeedback(uint8_t feedbackPayload[3]) {
-  feedbackPayload[0] = traversal_toggle;
-  feedbackPayload[1] = robarm_toggle;
-  feedbackPayload[2] = science_toggle;
-
-  LoRa.beginPacket();
-  LoRa.write(feedbackPayload, sizeof(feedbackPayload));
-  LoRa.endPacket();
 }
 
 void printValues() {
