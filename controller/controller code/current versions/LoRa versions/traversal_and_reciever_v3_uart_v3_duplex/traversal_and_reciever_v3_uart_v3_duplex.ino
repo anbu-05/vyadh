@@ -90,7 +90,6 @@ void loop() {
 
   assignFromLoRa();
   assignFromPayload(payload);
-  sendFeedback(feedbackPayload);
   //printValues();
 
 //mode select
@@ -266,6 +265,8 @@ void assignFromPayload(uint8_t payload[13]) {
 
 void assignFromLoRa() {
   int packetSize = LoRa.parsePacket();
+  Serial.print("packet size: ");
+  Serial.println(packetSize);
   if (packetSize) {
     Serial.println("###Received packet###");
 
@@ -282,6 +283,7 @@ void assignFromLoRa() {
     Serial.print("RSSI: ");
     Serial.println(LoRa.packetRssi());
     //Serial.println(LoRa.packetFrequencyError());
+    sendFeedback(feedbackPayload);
   }
 }
 
