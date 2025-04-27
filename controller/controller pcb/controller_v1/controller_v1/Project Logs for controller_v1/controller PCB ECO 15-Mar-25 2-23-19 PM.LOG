@@ -1,0 +1,6 @@
+Change Component Designator: OldDesignator= NewDesignator=C8
+Change Component Designator: OldDesignator= NewDesignator=C19
+Change Component Designator: OldDesignator= NewDesignator=C20
+Change Net Name : Old Net Name=NetC?_1 New Net Name=NetC8_1
+Add Differential Pair: Number of nets in differential pair UART_D+ is 1 instead of 2
+Add Differential Pair: Number of nets in differential pair UART_D- is 1 instead of 2
