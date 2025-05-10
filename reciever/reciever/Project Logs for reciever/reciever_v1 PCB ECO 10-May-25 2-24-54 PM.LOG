@@ -1,0 +1,39 @@
+Change Component Footprint: Designator=bus Old Footprint=FP-S4B-XH-SM4-TB_LF_SN-MFG New Footprint=FP-S4B-PH-SM4-TB-MFG
+Change Component Comment : Designator=bus Old Comment=S4B-XH-SM4-TB(LF)(SN) New Comment=S4B-PH-SM4-TB
+Change Managed Component Library Link : Designator=bus Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 Old ItemGUID=568CC0CF-23E1-4CA7-B753-444D4A8B8E26 New ItemGUID=69A90245-0A3D-4096-8BA1-C11720EF5166 Old RevisionGUID=783A03EF-8792-4845-8ADA-A3415580A531 New RevisionGUID=C90833C6-401D-406D-BF0F-D115F0B6C640
+Change component parameters: Designator = "bus" ("bus"); Footprint = "FP-S4B-XH-SM4-TB_LF_SN-MFG"; UniqueID = "\PRPYTBJO" ("\PRPYTBJO")
+Change component parameters (AddParameter): Name = "Contact Material"; Value = "Copper, Tin"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Contact Plating"; Value = "Copper, Tin"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Contact Resistance"; Value = "20mO"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Current Rating"; Value = "2A"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Depth"; Value = "7.6mm"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Gender"; Value = "Male"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Height"; Value = "5.5mm"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Housing Color"; Value = "Beige"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Housing Material"; Value = "Polyamide"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Length"; Value = "11.9mm"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Max Current Rating"; Value = "2A"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Max Operating Temperature"; Value = "85°C"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Max Voltage Rating (AC)"; Value = "100V"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Max Voltage Rating (DC)"; Value = "100V"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Min Operating Temperature"; Value = "-25°C"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Number of Contacts"; Value = "4"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Number of Pins"; Value = "4"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Number of Rows"; Value = "1"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Packaging"; Value = "Tape and Reel"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Pitch"; Value = "2mm"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "RoHS"; Value = "Non-Compliant"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Termination"; Value = "Solder"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Voltage Rating"; Value = "100V"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=reciever_v1 Member=Component bus S4B-PH-SM4-TB
+Add Class Member: Failed to add class member : Component C6 0.1uF
+Add Class Member: Failed to add class member : Component C7 0.1uF
+Added Member To Class: ClassName=reciever_v1 Member=Component C11 0.1uF
+Added Member To Class: ClassName=reciever_v1 Member=Component C12 22uF
+Added Member To Class: ClassName=reciever_v1 Member=Component CAN_controller TJA1051T/3,118
+Add Class Member: Failed to add class member : Component D_PWR 150080BS75000
+Add Class Member: Failed to add class member : Component ESP32-S3 ESP32-S3-WROOM-1U-N16R8
+Add Class Member: Failed to add class member : Component LDO AMS1117-3.3
+Add Class Member: Failed to add class member : Component LoRa RA-02_LORA
+Added Member To Class: ClassName=reciever_v1 Member=Component Rcan CRCW0805120RFKEA
+Add Class Member: Failed to add class member : Component SW_PWR JS102011SCQN
