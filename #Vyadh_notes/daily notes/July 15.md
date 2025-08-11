@@ -1,0 +1,4 @@
+- motor connection problem
+- we went on an FPGA tangent
+- electroboom video about current and voltage
+- we told them to do inventory

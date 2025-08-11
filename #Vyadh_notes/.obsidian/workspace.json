@@ -1,0 +1,219 @@
+{
+  "main": {
+    "id": "bde253b3290656eb",
+    "type": "split",
+    "children": [
+      {
+        "id": "cfac5531ad641377",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b595fbe88f1d9191",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "electrical changes documentation/List of tasks (rev 1).md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "List of tasks (rev 1)"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "82bcc13dccda8087",
+    "type": "split",
+    "children": [
+      {
+        "id": "bc6983597c08cc45",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "bd6e8ebd5801f2f8",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "93e0136fceb65534",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "d90cac224d99a444",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 329.5
+  },
+  "right": {
+    "id": "a9c25be929dd2d41",
+    "type": "split",
+    "children": [
+      {
+        "id": "97c9dc2332b35cc5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d06af7738d0b02eb",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "projects and questions for juniors/questions.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for questions"
+            }
+          },
+          {
+            "id": "82f5bc1d6cd5f8da",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "2ee3158f46e58493",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "d6591e1cf0697a20",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "projects and questions for juniors/questions.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of questions"
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "b595fbe88f1d9191",
+  "lastOpenFiles": [
+    "electrical changes progress/Differential UART progress.md",
+    "electrical changes documentation/List of tasks (rev 1).md",
+    "electrical changes documentation/Standards.md",
+    "electrical changes documentation/star topology.png",
+    "electrical changes documentation/document for new electrical changes (rev 7).md",
+    "electrical changes documentation/bus topology.png",
+    "electrical changes documentation/current topology.png",
+    "daily notes/July 22.md",
+    "electrical changes progress/MainBoard progress.md",
+    "Pasted image 20250727041258.png",
+    "electrical changes progress/MainBoard AI chats.md",
+    "electrical changes documentation/List of tasks (rev 2).md",
+    "electrical changes progress",
+    "daily notes/July 24.md",
+    "Team Vyadh.md",
+    "daily notes/July 17.md",
+    "document for new electrical changes (rev 6).pdf",
+    "Pasted image 20250701195957.png",
+    "juniors/need to teach juniors.md",
+    "juniors/what has been taught so far.md",
+    "daily notes/July 15.md",
+    "daily notes/July 16.md",
+    "juniors/questions.md",
+    "daily notes",
+    "juniors/Work when they come back to campus.md",
+    "vyadh meet 2 (12th july).md",
+    "electrical changes documentation/older revisions/document for new electrical changes (rev 4).md",
+    "things they haven't agreed to.md",
+    "MOM june 14.md",
+    "temp tasks.md",
+    "electrical changes documentation/older revisions/document for new electrical changes (rev 6).md",
+    "daily notes/June 14.md",
+    "daily notes/June 13.md",
+    "document for new electrical changes (rev 5).pdf",
+    "electrical changes documentation/images/main control board connections.drawio.png",
+    "electrical changes documentation/images/main control board connections.drawio",
+    "electrical changes documentation/images",
+    "electrical changes documentation/New folder",
+    "electrical changes documentation/older revisions",
+    "daily notes",
+    "electrical changes documentation/new electrical topology.png",
+    "electrical changes documentation/ideal process tree.png",
+    "electrical changes documentation/electrical topology.csv",
+    "electrical changes documentation/electrical topology.png",
+    "electrical changes documentation/rover process tree.png"
+  ]
+}

@@ -1,0 +1,2 @@
+- we got new components. but some of the ordered parts are wrong -need to review it and leave out components that need to be replaced.
+- i was too late with making the excel sheet of things to buy. i was incompetent myself. i wasnt quick enough

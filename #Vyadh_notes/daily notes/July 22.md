@@ -1,0 +1,1 @@
+- they put the multimeter onto a socket while it was on current mode

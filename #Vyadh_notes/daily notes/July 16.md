@@ -1,0 +1,12 @@
+- mech abiram came to me and asked me why i told elec abiram that mech abiram is always taking inanya's side, and that it's always a 2v1. elec abiram is a fucking retard, that logic doesnt even make sense.
+- i spoke to mithilesh, sent him both of my docs, and told him that ill send him a complete document by sunday -a document that both inanya and disha agree with. that was a convo.
+- asked them about encoders -they barely have a clue about it. they know what absolute encoders are, but they had no clue what it looks like or how it works, why they are what they are
+- they finished doing the inventory. it is a solid sorting tbh.
+- their line follower code:
+	- stavyansh did registry editing to increase pwm frequency so that he could drive his motors at a lower pwm. he was able to explain it, and later on when it didnt work he was also able to diagnose it.
+	- saptaparna keeps asking me questions about random stuff, keeps overthinking. i really like it -she's very intrigued about electronics. her code is also very solid, just a few mistakes she'll fix when she uploads it onto the bot
+	- adarsh -couldnt check his code, he didnt come 
+	- tanmay worked on it using PID. he seems to have a fairly good understanding of it. and i am able to draw parallels from this to when i overshot my tasks with extra details. 
+	- nagaraj did not work on it. he did not make the bot because he didnt have it's body. i gave him one from the lab to take to his room and work on
+	- parth left
+- inanya asked them what the pack of vibration motors was, and when they said motors she denied. ruhi was asking for a humidity sensor to i brought a dht11, and they had a dht22. inanya saw it said that dht11 does not measure humidity.
